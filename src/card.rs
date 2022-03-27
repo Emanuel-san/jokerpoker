@@ -10,3 +10,12 @@ pub enum CardSuit{
     Spade,
     Heart
 }
+
+impl Card {
+    pub fn new_card(value: u8, suit: CardSuit) -> Self {
+        Self {
+            value,
+            suit
+        }
+    }
+}
