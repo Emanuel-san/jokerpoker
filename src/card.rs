@@ -15,20 +15,16 @@ pub enum CardSuit{
 
 impl Card {
 
-    pub fn new(value: u8, suit: CardSuit) -> Self {
+    pub fn new(value: u8, suit: u8) -> Self {
         Self {
             value,
-            suit
-        }
-    }
-
-    pub fn random_suit(rng_value: u8) -> CardSuit{
-        match rng_value {
-            1 => CardSuit::Diamond,
-            2 => CardSuit::Clove,
-            3 => CardSuit::Spade,
-            4 => CardSuit::Heart,
-            _ => panic!("Card:: Failed choosing random suit")
+            suit: match suit {
+                1 => CardSuit::Diamond,
+                2 => CardSuit::Clove,
+                3 => CardSuit::Spade,
+                4 => CardSuit::Heart,
+                _ => panic!("Card:: Failed choosing random suit")
+            }
         }
     }
 }
