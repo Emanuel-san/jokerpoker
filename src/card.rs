@@ -15,10 +15,14 @@ pub enum CardSuit{
 
 impl Card {
 
-    pub fn new(value: u8, suit: u8) -> Self {
-        Self {
-            value,
-            suit: match suit {
+    pub fn new() -> Self {
+        let mut rng = thread_rng(); //declare a rng gen
+        let card_value = rng.gen_range(1..=14); //get random card value
+        let suit_value = rng.gen_range(1..=4); //get random suit value
+
+        Self {  //construct a card and return it
+            value: card_value,
+            suit: match suit_value {
                 1 => CardSuit::Diamond,
                 2 => CardSuit::Clove,
                 3 => CardSuit::Spade,
@@ -26,13 +30,5 @@ impl Card {
                 _ => panic!("Card:: Failed choosing random suit")
             }
         }
-    }
-
-    pub fn get_card() -> Card{
-        let mut rng = thread_rng();
-        let card_value = rng.gen_range(1..=14);
-        let suit_value = rng.gen_range(1..=4);
-        let new_card = Card::new(card_value, suit_value);
-        new_card
     }
 }
