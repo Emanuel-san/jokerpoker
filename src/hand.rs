@@ -6,15 +6,6 @@ pub struct Hand {
     pub hand_vec: Vec<Card>,
 }
 
-// impl IntoIterator for Hand{
-//     type Item = Card;
-
-//     type IntoIter = std::vec::IntoIter<Self::Item>;
-
-//     fn into_iter(self) -> Self::IntoIter {
-//         self.hand_vec.into_iter()
-//     }
-// }
 
 impl Hand {
 
@@ -44,6 +35,13 @@ impl Hand {
         if self.chk_duplicate(&new_card)== false{ //check if the card already exist in a vec
             self.hand_vec.push(new_card); //push to vec if its not a duplicate
         }   
+    }
+
+    pub fn sort_hand_by_value(&mut self){
+        let Hand {
+            hand_vec: temp
+        } = self;
+        temp.sort_by(|a, b| a.value.cmp(&b.value));
     }
 }
 
