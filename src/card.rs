@@ -16,11 +16,11 @@ pub enum CardSuit{
 impl Card {
 
     pub fn new() -> Self {
-        let mut rng = thread_rng(); //declare a rng gen
-        let card_value = rng.gen_range(1..=14); //get random card value
-        let suit_value = rng.gen_range(1..=4); //get random suit value
+        let mut rng = thread_rng(); //declare a rng gen (rand dependency)
+        let card_value = rng.gen_range(1..=14); //random card value
+        let suit_value = rng.gen_range(1..=4); //random suit value
 
-        Self {  //construct a card and return it
+        Self {  //construct a card
             value: card_value,
             suit: match suit_value {
                 1 => CardSuit::Diamond,
