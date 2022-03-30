@@ -4,7 +4,7 @@ pub struct Card{
     pub value: u8,
     pub suit: CardSuit,
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum CardSuit{
     Diamond,
     Clove,
