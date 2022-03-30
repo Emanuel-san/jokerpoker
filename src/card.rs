@@ -1,3 +1,4 @@
+use rand::prelude::*;
 
 #[derive(Debug)]
 pub struct Card{
@@ -25,5 +26,13 @@ impl Card {
                 _ => panic!("Card:: Failed choosing random suit")
             }
         }
+    }
+
+    pub fn get_card() -> Card{
+        let mut rng = thread_rng();
+        let card_value = rng.gen_range(1..=14);
+        let suit_value = rng.gen_range(1..=4);
+        let new_card = Card::new(card_value, suit_value);
+        new_card
     }
 }

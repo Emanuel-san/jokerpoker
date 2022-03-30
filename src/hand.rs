@@ -1,6 +1,5 @@
 //mod card;
-use crate::card::Card;
-use rand::prelude::*;
+use crate::card::*;
 
 #[derive(Debug)]
 pub struct Hand {
@@ -8,19 +7,17 @@ pub struct Hand {
 }
 
 impl Hand {
+    
+    /*Constructor */
     pub fn new() -> Self {
-        let mut rng = thread_rng();
         let mut hand_of_cards = Vec::new();
-        let mut card_value: u8;
-        let mut suit_value: u8;
         let mut new_card: Card;
         
-        while hand_of_cards.len() < 5 {
-            card_value = rng.gen_range(1..=14);
-            suit_value = rng.gen_range(1..=4);
-            new_card = Card::new(card_value, suit_value);
-            if Hand::chk_duplicate(&hand_of_cards, &new_card)
-                {hand_of_cards.push(new_card);}
+        while hand_of_cards.len() < 5 { //loop untill vec holds 5 elements
+            new_card = Card::get_card(); //get a card
+            if Hand::chk_duplicate(&hand_of_cards, &new_card) == false{ //check if the card already exist in a vec
+                hand_of_cards.push(new_card); //push to vec if its not a duplicate
+            }
         }
 
         Self {
