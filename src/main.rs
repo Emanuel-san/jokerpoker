@@ -1,19 +1,25 @@
 mod card;
 mod hand;
-use card::*;
+//use card::*;
 use hand::*;
 
 //use crate::card::CardSuit;
 //use crate::CardSuit::*;
 //use rand::prelude::*;
-fn main() {
 
-    // let five_card_hand = Hand::new();
-    // println!("{:?}", five_card_hand);
+fn generate_five_card_hand(empty_hand: &mut Hand){
+    while empty_hand.hand_vec.len() < 5 { //loop untill vec holds 5 elements
+        empty_hand.push_card_to_hand();
+    }
+}
+fn main() {
+    let mut five_card_hand = Hand::new();
+    generate_five_card_hand(&mut five_card_hand);
+
+    println!("{:?}", five_card_hand);
     // let Hand{ 
-    //     hand_vec: decon_hand_vec
+    //     hand_vec: deconstructed_hand
     //     } = five_card_hand;
-    //Hand::chk_duplicate(&decon_hand_vec)
 
 
     
