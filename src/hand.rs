@@ -30,7 +30,7 @@ impl Hand {
         return false
     }
 
-    pub fn push_card_to_hand(&mut self){
+    pub fn draw_card_to_hand(&mut self){
         let new_card = Card::new();
         if self.chk_duplicate(&new_card)== false{ //check if the card already exist in a vec
             self.hand_vec.push(new_card); //push to vec if its not a duplicate
@@ -42,6 +42,15 @@ impl Hand {
             hand_vec: temp
         } = self;
         temp.sort_by(|a, b| a.value.cmp(&b.value));
+    }
+
+
+    pub fn discard_card_from_hand(&mut self, index: usize) -> Card{
+        if self.hand_vec.len() >= index {
+            self.hand_vec.remove(index)
+        } else {
+            panic!("Hand::discard_card_from_hand: Given index does not exists!");
+        }
     }
 }
 
