@@ -1,5 +1,6 @@
 mod card;
 mod hand;
+mod deck;
 //use card::*;
 use hand::*;
 
