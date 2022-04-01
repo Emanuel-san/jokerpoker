@@ -1,4 +1,3 @@
-//use rand::prelude::*;
 
 #[derive(Debug)]
 pub struct Card{
@@ -27,7 +26,7 @@ impl Card {
     }
 
 
-    pub fn generate_card(card_value: i8, suit_value: i8) -> Card{
+    pub fn get_card(card_value: i8, suit_value: i8) -> Card{
         let mut new_card = Card::new();
         new_card.value = card_value;
         new_card.suit = match suit_value {
@@ -36,7 +35,7 @@ impl Card {
             1 => CardSuit::Clove,
             2 => CardSuit::Spade,
             3 => CardSuit::Heart,
-            _ => panic!("Card:: Failed choosing random suit")
+            _ => panic!("Card::generate_card: Failed choosing random suit")
         };
         new_card
     }
