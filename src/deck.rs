@@ -14,5 +14,9 @@ impl Deck {
             deck: deck_of_cards,
         }
     }
+
+    pub fn generate_deck(&mut self){
+        
+    }
 }
 

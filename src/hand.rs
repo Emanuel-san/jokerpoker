@@ -30,12 +30,12 @@ impl Hand {
         return false
     }
 
-    pub fn draw_card_to_hand(&mut self){
-        let new_card = Card::new();
-        if self.chk_duplicate(&new_card)== false{ //check if the card already exist in a vec
-            self.hand_vec.push(new_card); //push to vec if its not a duplicate
-        }   
-    }
+    // pub fn draw_card_to_hand(&mut self){
+    //     let new_card = Card::new();
+    //     if self.chk_duplicate(&new_card)== false{ //check if the card already exist in a vec
+    //         self.hand_vec.push(new_card); //push to vec if its not a duplicate
+    //     }   
+    // }
 
     pub fn sort_hand_by_value(&mut self){
         let Hand {

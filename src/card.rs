@@ -1,8 +1,8 @@
-use rand::prelude::*;
+//use rand::prelude::*;
 
 #[derive(Debug)]
 pub struct Card{
-    pub value: u8,
+    pub value: i8,
     pub suit: CardSuit,
 }
 #[derive(Debug, PartialEq)]
@@ -10,25 +10,35 @@ pub enum CardSuit{
     Diamond,
     Clove,
     Spade,
-    Heart
+    Heart,
+    Joker
 }
 
 impl Card {
 
-    pub fn new() -> Self {
-        let mut rng = thread_rng(); //declare a rng gen (rand dependency)
-        let card_value = rng.gen_range(1..=14); //random card value
-        let suit_value = rng.gen_range(1..=4); //random suit value
-
-        Self {  //construct a card
-            value: card_value,
-            suit: match suit_value {
-                1 => CardSuit::Diamond,
-                2 => CardSuit::Clove,
-                3 => CardSuit::Spade,
-                4 => CardSuit::Heart,
-                _ => panic!("Card:: Failed choosing random suit")
-            }
+    //constructor
+    fn new() -> Self {
+        let value: i8;
+        let suit: CardSuit;
+        Self {
+            value,
+            suit
         }
     }
+
+
+    pub fn generate_card(card_value: i8, suit_value: i8) -> Card{
+        let mut new_card = Card::new();
+        new_card.value = card_value;
+        new_card.suit = match suit_value {
+            -1 => CardSuit::Joker,
+            1 => CardSuit::Diamond,
+            2 => CardSuit::Clove,
+            3 => CardSuit::Spade,
+            4 => CardSuit::Heart,
+            _ => panic!("Card:: Failed choosing random suit")
+        };
+        new_card
+    }
 }
+

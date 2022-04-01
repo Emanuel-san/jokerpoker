@@ -10,26 +10,26 @@ use crate::card::{Card, CardSuit};
 //use crate::CardSuit::*;
 //use rand::prelude::*;
 
-fn generate_five_card_hand(hand_obj: &mut Hand){
-    while hand_obj.hand_vec.len() < 5 { //loop untill vec holds 5 elements
-        hand_obj.draw_card_to_hand();
-    }
-}
+// fn generate_five_card_hand(hand_obj: &mut Hand){
+//     while hand_obj.hand_vec.len() < 5 { //loop untill vec holds 5 elements
+//         hand_obj.draw_card_to_hand();
+//     }
+// }
 
-fn print_hand(hand_obj: &Hand) {
-    let Hand{
-        hand_vec: temp_hand
-    } = hand_obj;
-    for card in temp_hand{
-        print!("{} of ", card.value);
-        match card.suit {
-            CardSuit::Diamond => print!("Diamonds | "),
-            CardSuit::Spade => print!("Spades | "),
-            CardSuit::Clove => print!("Cloves | "),
-            CardSuit::Heart => print!("Hearts | "),
-        }
-    }
-}
+// fn print_hand(hand_obj: &Hand) {
+//     let Hand{
+//         hand_vec: temp_hand
+//     } = hand_obj;
+//     for card in temp_hand{
+//         print!("{} of ", card.value);
+//         match card.suit {
+//             CardSuit::Diamond => print!("Diamonds | "),
+//             CardSuit::Spade => print!("Spades | "),
+//             CardSuit::Clove => print!("Cloves | "),
+//             CardSuit::Heart => print!("Hearts | "),
+//         }
+//     }
+// }
 
 
 fn main() {
