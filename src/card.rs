@@ -18,8 +18,8 @@ impl Card {
 
     //constructor
     fn new() -> Self {
-        let value: i8;
-        let suit: CardSuit;
+        let value: i8 = -1;
+        let suit = CardSuit::Joker;
         Self {
             value,
             suit
@@ -32,10 +32,10 @@ impl Card {
         new_card.value = card_value;
         new_card.suit = match suit_value {
             -1 => CardSuit::Joker,
-            1 => CardSuit::Diamond,
-            2 => CardSuit::Clove,
-            3 => CardSuit::Spade,
-            4 => CardSuit::Heart,
+            0 => CardSuit::Diamond,
+            1 => CardSuit::Clove,
+            2 => CardSuit::Spade,
+            3 => CardSuit::Heart,
             _ => panic!("Card:: Failed choosing random suit")
         };
         new_card
