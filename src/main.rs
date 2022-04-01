@@ -2,14 +2,9 @@ mod card;
 mod hand;
 mod deck;
 
-//use card::*;
 use hand::*;
 use deck::*;
 use card::*;
-
-//use crate::card::CardSuit;
-//use crate::CardSuit::*;
-//use rand::prelude::*;
 
 
 fn print_hand(hand_obj: &Hand) {
@@ -57,19 +52,4 @@ fn main() {
     println!("{}", deck_destructred.len());
     five_card_hand.draw_until_five_cards(&mut deck_of_cards);
     
-
-
-    
-    // generate_five_card_hand(&mut five_card_hand);
-    // //five_card_hand.sort_hand_by_value();
-    // //println!("Five card hand: {:?}", five_card_hand);
-
-    // let card = five_card_hand.hand_vec.remove(1);
-    // discarded_cards.push(card);
-    // discarded_cards.push(five_card_hand.discard_card_from_hand(3));
-    // //five_card_hand.discard_card_from_hand(3);
-    // //println!("Five card hand: {:?}", five_card_hand.hand_vec);
-    // //println!("Discarded: {:?}", discarded_cards);
-    // generate_five_card_hand(&mut five_card_hand);
-    // print_hand(&five_card_hand);
 }
