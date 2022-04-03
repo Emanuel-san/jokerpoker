@@ -8,17 +8,16 @@ use card::*;
 
 
 fn print_hand(hand_obj: &Hand) {
-    let Hand{
-        hand_vec: temp_hand
-    } = hand_obj;
-    for card in temp_hand{
-        if card.value != 14{
-            if card.value > 0{
-                print!("{} of ", card.value + 1);
-            } else {
-                print! ("Ace of ");
-            }
-        }
+
+    for card in &hand_obj.hand_vec{
+        match card.value {
+            13 | 14 => (),
+            12 => print!("King of "),
+            11 => print!("Queen of "),
+            10 => print!("Jack of "),
+            0 => print!("Ace of "),
+            number => print!("{} of ", number + 1),
+        };
         match card.suit {
             CardSuit::Joker => print!("Joker | "),
             CardSuit::Diamond => print!("Diamonds | "),
@@ -27,10 +26,10 @@ fn print_hand(hand_obj: &Hand) {
             CardSuit::Heart => print!("Hearts | "),
         }
     }
-    println!("\n");
+    println!("");
 }
 
-fn evaluate_hand(poker_hand: &Hand){
+fn evaluate_hand(poker_hand: &Hand) -> &str{
     let mut suit_tracker = vec![0u8; 4];
     let mut value_tracker = vec![0u8; 15];
     let mut jokers: u8 = 0;
@@ -46,8 +45,8 @@ fn evaluate_hand(poker_hand: &Hand){
         }
     }
 
-    value_tracker[13] = value_tracker[0]; //We need to add aces to the highest value count aswell since we only count them as lowest when checking values in previous for loop.
-    //println!("Values: {:?}", value_counter);
+    value_tracker[13] = value_tracker[0]; //We need to add aces to the highest value count aswell since we only count them as lowest value when counting in previous for loop.
+    //println!("Values: {:?}", value_tracker);
     // println!("Suits: {:?}", suit_counter);
     // println!("Jokers: {}", jokers);
 
@@ -68,12 +67,11 @@ fn evaluate_hand(poker_hand: &Hand){
         let mut jokers_left = jokers; //Each time a sequence "fails" we will shadow this variable and re-declare jokers to use in the next sequence
         let mut straight_cards = 0; // Same as above though we reset to 0 on "failed" sequence.
         for i in (0..vec_pointer).rev(){ // represents the sequence (0..ptr) = 0-13
-            println!("i: {} | ptr: {} | jokers: {} | straight_cards: {}| faces[i]: {}",i, vec_pointer, jokers_left, straight_cards, value_tracker[i]);
             if value_tracker[i] == 0 { // if element at index i is 0...
                 if jokers_left == 0 { // ...then we check if we have jokers left to use.
                     break; // If not then we break out.
                 }
-                jokers_left -= 1; //Remove joker is used
+                jokers_left -= 1; //Remove joker if used
             }
             else if i==vec_pointer-1 { //Since we use jokers we will only reduce vec_pointer if this is true, else its possible we miss a possible straight in the next sequence
                 vec_pointer -= 1;
@@ -87,6 +85,36 @@ fn evaluate_hand(poker_hand: &Hand){
         }
     }
 
+
+    //filter out values that are 0
+    // iterate over the vector, enumerate (index, value), but only iterate over 14 first indexes (else we enumarete jokers also)
+    // filter out any enumeration that had a value of 0 and collect them into a vector.
+    let mut values_filtered = value_tracker.into_iter().enumerate().take(13).filter(|&x|x.1 > 0).collect::<Vec<_>>();
+    //sort by quantity first, then by value
+    values_filtered.sort_unstable_by(|a, b| if b.1 == a.1 { //if same quantity
+                                                                                (b.0).cmp(&a.0) //Sort by value
+                                                                            } else { 
+                                                                                (b.1).cmp(&a.1)}); //else sort by quantity
+                                                                                
+    //println!("{:?}", values_filtered);
+    values_filtered[0].1 += jokers; //
+    if values_filtered.len() == 1 {
+    values_filtered.push((0, 0));
+    }
+    //println!("{:?}", values_filtered);
+ 
+    match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
+        (_,_,5,_) => "five-of-a-kind",
+        (true, true, _, _) => if vec_pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
+        (_,_,4,_) => "four-of-a-kind",
+        (_,_,3,2) => "full-house",
+        (true,_,_,_) => "flush",
+        (_,true,_,_) => "straight",
+        (_,_,3,_) => "three-of-a-kind",
+        (_,_,2,2) => "two-pair",
+        (_,_,2,_) => "one-pair",
+        _ => "high-card"
+     }
 }
 
 
@@ -94,7 +122,7 @@ fn main() {
     let mut deck_of_cards = Deck::get_deck();
     let mut five_card_hand = Hand::draw_five_card_hand(&mut deck_of_cards);
 
-    println!("{:?}", deck_of_cards);
+    //println!("{:?}", deck_of_cards);
     //println!("{:?}", five_card_hand);
     // let Deck {
     //     deck_vec: deck_destructred
@@ -116,6 +144,14 @@ fn main() {
     // println!("{}", deck_destructred.len());
     five_card_hand.draw_until_five_cards(&mut deck_of_cards);
 
-    evaluate_hand(&five_card_hand);
-    
+    println!("{}", evaluate_hand(&five_card_hand));
+    // let mut test_hand = Hand::new();
+    // test_hand.hand_vec.push(Card::get_card(1, 2));
+    // test_hand.hand_vec.push(Card::get_card(8, 1));
+    // test_hand.hand_vec.push(Card::get_card(10, 1));
+    // test_hand.hand_vec.push(Card::get_card(0, 2));
+    // test_hand.hand_vec.push(Card::get_card(0, 3));
+    //test_hand.hand_vec.push(Card::get_card(14, -1));
+    // print_hand(&test_hand);
+    // println!("Result: {}", evaluate_hand(&test_hand));
 }
