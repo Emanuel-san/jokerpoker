@@ -2,10 +2,62 @@ mod card;
 mod hand;
 mod deck;
 
+use bevy::prelude::*;
 use hand::*;
 use deck::*;
 use card::*;
 
+const CLEAR: Color = Color::rgb(0.1, 0.1, 0.1);
+struct CardSheet(Handle<TextureAtlas>);
+
+
+
+fn main() {
+ 
+    App::new()
+    .insert_resource(ClearColor(CLEAR))
+    .insert_resource(WindowDescriptor {
+        width: 1600.0,
+        height: 900.0,
+        title: "Five Card Poker".to_string(),
+        vsync: true,
+        resizable: false,
+        ..Default::default()
+    })
+    .add_plugins(DefaultPlugins)
+    .add_startup_system(setup)
+    .add_startup_system_to_stage(StartupStage::PreStartup, load_cards)
+    .run();
+
+    // test_hand.hand_vec.push(Card::get_card(1, 2));
+    // test_hand.hand_vec.push(Card::get_card(8, 1));
+    // test_hand.hand_vec.push(Card::get_card(10, 1));
+    // test_hand.hand_vec.push(Card::get_card(0, 2));
+    // test_hand.hand_vec.push(Card::get_card(0, 3));
+    //test_hand.hand_vec.push(Card::get_card(14, -1));
+
+}
+
+fn setup( mut commands: Commands, asset_server: Res<AssetServer>){
+    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+
+    // commands.spawn_bundle(SpriteBundle {
+    //     texture: asset_server.load("faces.png"),
+    //     ..Default::default()
+    // });
+}
+
+fn load_cards(mut commands: Commands, assets: Res<AssetServer>, mut texture_atlases: ResMut<Assets<TextureAtlas>>){
+    let image = assets.load("faces.png");
+    let atlas = TextureAtlas::from_grid_with_padding(
+        image, 
+        Vec2::splat(9.0), 
+        16, 
+        16, 
+        Vec2::splat(2.0));
+    let atlas_handle = texture_atlases.add(atlas);
+    commands.insert_resource(atlas_handle);
+}
 
 fn print_hand(hand_obj: &Hand) {
 
@@ -97,8 +149,8 @@ fn evaluate_hand(poker_hand: &Hand) -> &str{
                                                                                 (b.1).cmp(&a.1)}); //else sort by quantity
                                                                                 
     //println!("{:?}", values_filtered);
-    values_filtered[0].1 += jokers; //
-    if values_filtered.len() == 1 {
+    values_filtered[0].1 += jokers; //add jokers to the highest value 
+    if values_filtered.len() == 1 { //
     values_filtered.push((0, 0));
     }
     //println!("{:?}", values_filtered);
@@ -115,43 +167,4 @@ fn evaluate_hand(poker_hand: &Hand) -> &str{
         (_,_,2,_) => "one-pair",
         _ => "high-card"
      }
-}
-
-
-fn main() {
-    let mut deck_of_cards = Deck::get_deck();
-    let mut five_card_hand = Hand::draw_five_card_hand(&mut deck_of_cards);
-
-    //println!("{:?}", deck_of_cards);
-    //println!("{:?}", five_card_hand);
-    // let Deck {
-    //     deck_vec: deck_destructred
-    // } = &deck_of_cards;
-
-    //println!("{}", deck_destructred.len());
-
-    print_hand(&five_card_hand);
-    five_card_hand.discard_card_from_hand(0);
-    println!("");
-    print_hand(&five_card_hand);
-    five_card_hand.draw_until_five_cards(&mut deck_of_cards);
-    println!("");
-    print_hand(&five_card_hand);
-
-    // let Deck {
-    //     deck_vec: deck_destructred
-    // } = &deck_of_cards;
-    // println!("{}", deck_destructred.len());
-    five_card_hand.draw_until_five_cards(&mut deck_of_cards);
-
-    println!("{}", evaluate_hand(&five_card_hand));
-    // let mut test_hand = Hand::new();
-    // test_hand.hand_vec.push(Card::get_card(1, 2));
-    // test_hand.hand_vec.push(Card::get_card(8, 1));
-    // test_hand.hand_vec.push(Card::get_card(10, 1));
-    // test_hand.hand_vec.push(Card::get_card(0, 2));
-    // test_hand.hand_vec.push(Card::get_card(0, 3));
-    //test_hand.hand_vec.push(Card::get_card(14, -1));
-    // print_hand(&test_hand);
-    // println!("Result: {}", evaluate_hand(&test_hand));
 }
