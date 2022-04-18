@@ -7,7 +7,7 @@ use hand::*;
 use deck::*;
 use card::*;
 
-const CLEAR: Color = Color::rgb(0.1, 0.1, 0.1);
+const CLEAR: Color = Color::DARK_GREEN;
 struct CardSheet(Handle<TextureAtlas>);
 
 
@@ -25,8 +25,9 @@ fn main() {
         ..Default::default()
     })
     .add_plugins(DefaultPlugins)
-    .add_startup_system(setup)
     .add_startup_system_to_stage(StartupStage::PreStartup, load_cards)
+    .add_startup_system(spawn_camera)
+    .add_startup_system(draw_card)
     .run();
 
     // test_hand.hand_vec.push(Card::get_card(1, 2));
@@ -38,7 +39,7 @@ fn main() {
 
 }
 
-fn setup( mut commands: Commands, asset_server: Res<AssetServer>){
+fn spawn_camera( mut commands: Commands/*, asset_server: Res<AssetServer> */){
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     // commands.spawn_bundle(SpriteBundle {
@@ -51,12 +52,21 @@ fn load_cards(mut commands: Commands, assets: Res<AssetServer>, mut texture_atla
     let image = assets.load("faces.png");
     let atlas = TextureAtlas::from_grid_with_padding(
         image, 
-        Vec2::splat(9.0), 
-        16, 
-        16, 
-        Vec2::splat(2.0));
+        Vec2::new(168.0, 245.0), 
+        13, 
+        5,
+        Vec2::new(-0.5, -2.0));
     let atlas_handle = texture_atlases.add(atlas);
-    commands.insert_resource(atlas_handle);
+    commands.insert_resource(CardSheet(atlas_handle));
+}
+
+fn draw_card (mut commands: Commands, cards: Res<CardSheet>){
+    let mut sprite = TextureAtlasSprite::new(40);
+    commands.spawn_bundle(SpriteSheetBundle {
+        sprite: sprite,
+        texture_atlas: cards.0.clone(),
+        ..Default::default()
+    }).id();
 }
 
 fn print_hand(hand_obj: &Hand) {
