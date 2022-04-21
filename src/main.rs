@@ -8,6 +8,8 @@ use deck::*;
 use card::*;
 
 const CLEAR: Color = Color::DARK_GREEN;
+const NORMAL_BUTTON: Color = Color::MIDNIGHT_BLUE;
+//const BUTTON_PRESSED: Color = Color::CYAN;
 struct CardSheet(Handle<TextureAtlas>);
 
 
@@ -26,30 +28,52 @@ fn main() {
     })
     .add_plugins(DefaultPlugins)
     .add_startup_system_to_stage(StartupStage::PreStartup, load_cards)
-    .add_startup_system(spawn_camera)
-    .add_startup_system(draw_card)
+    .add_startup_system(setup)
+    .add_startup_system(spawn_deck_sprite)
     .run();
 
-    // test_hand.hand_vec.push(Card::get_card(1, 2));
-    // test_hand.hand_vec.push(Card::get_card(8, 1));
-    // test_hand.hand_vec.push(Card::get_card(10, 1));
-    // test_hand.hand_vec.push(Card::get_card(0, 2));
-    // test_hand.hand_vec.push(Card::get_card(0, 3));
-    //test_hand.hand_vec.push(Card::get_card(14, -1));
-
 }
 
-fn spawn_camera( mut commands: Commands/*, asset_server: Res<AssetServer> */){
+fn setup( mut commands: Commands, asset_server: Res<AssetServer>){
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(UiCameraBundle::default());
 
-    // commands.spawn_bundle(SpriteBundle {
-    //     texture: asset_server.load("faces.png"),
-    //     ..Default::default()
-    // });
-}
+    commands
+        .spawn_bundle(ButtonBundle {
+            style: Style {
+                size: Size::new(Val::Px(250.0), Val::Px(150.0)),
+                // position button
+                margin: Rect { left: Val::Px(1300.0), bottom: Val::Px(50.0), ..Default::default()},
+                // horizontally center child text
+                justify_content: JustifyContent::Center,
+                // vertically center child text
+                align_items: AlignItems::Center,
+                ..Default::default()
+            },
+            color: NORMAL_BUTTON.into(),
+            transform: Transform::from_xyz(0.0,0.0,0.0),
+            ..Default::default()
+        }).with_children(|parent| {
+            parent.spawn_bundle(TextBundle {
+                    text: Text::with_section(
+                        "Deal",
+                        TextStyle {
+                            font: asset_server.load("PlayfairDisplay-Regular.ttf"),
+                            font_size: 70.0,
+                            color: Color::WHITE,
+                        },
+                        TextAlignment {
+                            vertical: VerticalAlign::Center,
+                            horizontal: HorizontalAlign::Center,
+                        },
+                    ),
+                    ..Default::default()
+                });
+            });
+        }
 
-fn load_cards(mut commands: Commands, assets: Res<AssetServer>, mut texture_atlases: ResMut<Assets<TextureAtlas>>){
-    let image = assets.load("faces.png");
+fn load_cards(mut commands: Commands, asset_server: Res<AssetServer>, mut texture_atlases: ResMut<Assets<TextureAtlas>>){
+    let image = asset_server.load("faces.png");
     let atlas = TextureAtlas::from_grid_with_padding(
         image, 
         Vec2::new(168.0, 245.0), 
@@ -60,11 +84,12 @@ fn load_cards(mut commands: Commands, assets: Res<AssetServer>, mut texture_atla
     commands.insert_resource(CardSheet(atlas_handle));
 }
 
-fn draw_card (mut commands: Commands, cards: Res<CardSheet>){
-    let mut sprite = TextureAtlasSprite::new(40);
+fn spawn_deck_sprite (mut commands: Commands, cards: Res<CardSheet>){
+    let mut sprite = TextureAtlasSprite::new(54);
     commands.spawn_bundle(SpriteSheetBundle {
         sprite: sprite,
         texture_atlas: cards.0.clone(),
+        transform: Transform::from_xyz(-700.0,300.0,0.0),
         ..Default::default()
     }).id();
 }
