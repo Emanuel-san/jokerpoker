@@ -10,7 +10,6 @@ pub struct Hand {
 
 impl Hand {
 
-    /*Constructor */
     fn new() -> Self {
         let hand_of_cards = Vec::new();
 
@@ -35,15 +34,6 @@ impl Hand {
         new_hand.draw_until_five_cards(deck_of_cards);
         new_hand
     }
-
-
-    // pub fn sort_hand_by_value(&mut self){
-    //     let Hand {
-    //         hand_vec: temp
-    //     } = self;
-    //     temp.sort_by(|a, b| a.value.cmp(&b.value));
-    // }
-
 
     pub fn discard_card_from_hand(&mut self, index: usize){
         if self.hand_vec.len() - 1 >= index {

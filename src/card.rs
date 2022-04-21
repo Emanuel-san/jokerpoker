@@ -6,7 +6,7 @@ pub struct Card{
 }
 #[derive(Debug, PartialEq)]
 pub enum CardSuit{
-    Diamond,
+    Diamond = 1,
     Clove,
     Spade,
     Heart,
