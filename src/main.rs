@@ -121,6 +121,7 @@ fn evaluate_hand(poker_hand: &Hand) -> &str{
 fn main() {
     let mut deck_of_cards = Deck::get_deck();
     let mut five_card_hand = Hand::draw_five_card_hand(&mut deck_of_cards);
+    println!("{}", five_card_hand.hand_vec[0].suit as u8);
 
     //println!("{:?}", deck_of_cards);
     //println!("{:?}", five_card_hand);

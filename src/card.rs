@@ -4,9 +4,9 @@ pub struct Card{
     pub value: i8,
     pub suit: CardSuit,
 }
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CardSuit{
-    Diamond,
+    Diamond = 1,
     Clove,
     Spade,
     Heart,
