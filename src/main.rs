@@ -1,16 +1,18 @@
 mod card;
 mod hand;
 mod deck;
+mod debug;
 
 use bevy::prelude::*;
 use hand::*;
 use deck::*;
 use card::*;
+use debug::DebugPlugin;
 
 const CLEAR: Color = Color::DARK_GREEN;
 const NORMAL_BUTTON: Color = Color::MIDNIGHT_BLUE;
 //const BUTTON_PRESSED: Color = Color::CYAN;
-struct CardSheet(Handle<TextureAtlas>);
+pub struct CardSheet(Handle<TextureAtlas>);
 
 
 
@@ -30,6 +32,9 @@ fn main() {
     .add_startup_system_to_stage(StartupStage::PreStartup, load_cards)
     .add_startup_system(setup)
     .add_startup_system(spawn_deck_sprite)
+    .add_plugin(DebugPlugin)
+    .add_plugin(HandPlugin)
+    .add_plugin(DeckPlugin)
     .run();
 
 }
@@ -85,7 +90,7 @@ fn load_cards(mut commands: Commands, asset_server: Res<AssetServer>, mut textur
 }
 
 fn spawn_deck_sprite (mut commands: Commands, cards: Res<CardSheet>){
-    let mut sprite = TextureAtlasSprite::new(54);
+    let sprite = TextureAtlasSprite::new(54);
     commands.spawn_bundle(SpriteSheetBundle {
         sprite: sprite,
         texture_atlas: cards.0.clone(),
@@ -94,7 +99,7 @@ fn spawn_deck_sprite (mut commands: Commands, cards: Res<CardSheet>){
     }).id();
 }
 
-fn print_hand(hand_obj: &Hand) {
+fn print_hand(hand_obj: &HandState) {
 
     for card in &hand_obj.hand_vec{
         match card.value {
@@ -116,7 +121,7 @@ fn print_hand(hand_obj: &Hand) {
     println!("");
 }
 
-fn evaluate_hand(poker_hand: &Hand) -> &str{
+fn evaluate_hand(poker_hand: &HandState) -> &str{
     let mut suit_tracker = vec![0u8; 4];
     let mut value_tracker = vec![0u8; 15];
     let mut jokers: u8 = 0;
