@@ -29,17 +29,17 @@ fn main() {
         ..Default::default()
     })
     .add_plugins(DefaultPlugins)
+    .add_plugin(DebugPlugin)
     .add_startup_system_to_stage(StartupStage::PreStartup, load_cards)
     .add_startup_system(setup)
     .add_startup_system(spawn_deck_sprite)
-    .add_plugin(DebugPlugin)
-    .add_plugin(HandPlugin)
     .add_plugin(DeckPlugin)
+    .add_plugin(HandPlugin)
     .run();
 
 }
 
-fn setup( mut commands: Commands, asset_server: Res<AssetServer>){
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     commands.spawn_bundle(UiCameraBundle::default());
 

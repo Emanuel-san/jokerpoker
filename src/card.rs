@@ -3,23 +3,23 @@ use bevy::prelude::*;
 
 #[derive(Debug, Component)]
 pub struct Card{
-    pub value: i8,
+    pub value: usize,
     pub suit: CardSuit,
 }
-#[derive(Debug, PartialEq, Component)]
+#[derive(Debug, PartialEq, Component, Clone, Copy)]
 pub enum CardSuit{
     Diamond = 1,
     Clove,
     Spade,
     Heart,
-    Joker
+    Joker = 0
 }
 
 impl Card {
 
     //constructor
     fn new() -> Self {
-        let value: i8 = -1;
+        let value: usize = 0;
         let suit = CardSuit::Joker;
         Self {
             value,
@@ -28,7 +28,7 @@ impl Card {
     }
 
 
-    pub fn get_card(card_value: i8, suit_value: i8) -> Card{
+    pub fn get_card(card_value: usize, suit_value: i8) -> Card{
         let mut new_card = Card::new();
         new_card.value = card_value;
         new_card.suit = match suit_value {

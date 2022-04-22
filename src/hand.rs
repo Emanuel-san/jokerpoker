@@ -22,31 +22,38 @@ impl Plugin for HandPlugin {
 
         app
         .insert_resource(hand_res)
-        .add_system(draw_until_five_cards)
-        .add_system(spawn_hand);
+        .add_startup_system(draw_until_five_cards)
+        .add_startup_system(spawn_hand);
     }
 }
 
-fn spawn_hand(mut commands: Commands, cards: Res<CardSheet>, mut hand: ResMut<HandState>){
-    
-    let sprite = TextureAtlasSprite::new(1);
-    commands.spawn_bundle(SpriteSheetBundle {
-        sprite: sprite,
-        texture_atlas: cards.0.clone(),
-        transform: Transform::from_xyz(0.0,0.0,0.0),
-        ..Default::default()
-    }).id();
+fn spawn_hand(mut commands: Commands, cards: Res<CardSheet>, hand: Res<HandState>){
+    let mut index: usize;
+    let mut x = -700.0;
+    for card in &hand.hand_vec{
+        println!("{:?}", card);
+        index = card.value * card.suit as usize;
+        let sprite = TextureAtlasSprite::new(index);
+        commands.spawn_bundle(SpriteSheetBundle {
+            sprite: sprite,
+            texture_atlas: cards.0.clone(),
+            transform: Transform::from_xyz(x,0.0,0.0),
+            ..Default::default()
+        }).id();
+        x += 170.0;
+    }
 }
 
 pub fn draw_until_five_cards(mut deck_of_cards: ResMut<DeckState>, mut hand: ResMut<HandState>){
-    while hand.hand_vec.len() < 5{
-        let drawn_card = deck_of_cards.deck_vec.pop();
-        match drawn_card {
-            Some(card) => hand.hand_vec.push(card),
-            None => panic!("Deck::draw_card_from_deck: Received a None option")
-        }
-    }
-    assert!(hand.hand_vec.len() <= 5, "Hand::draw_until_five_cards:: Can not exit with a vector length greater then 5, exit occured with length {}", hand.hand_vec.len());
+    println!("{:?}", deck_of_cards.deck_vec);
+    // while hand.hand_vec.len() < 5{
+    //     let drawn_card = deck_of_cards.deck_vec.pop();
+    //     match drawn_card {
+    //         Some(card) => hand.hand_vec.push(card),
+    //         None => panic!("Deck::draw_card_from_deck: Received a None option")
+    //     }
+    // }
+    // assert!(hand.hand_vec.len() <= 5, "Hand::draw_until_five_cards:: Can not exit with a vector length greater then 5, exit occured with length {}", hand.hand_vec.len());
 }
 
 impl HandState {

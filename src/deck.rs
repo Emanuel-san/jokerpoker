@@ -4,7 +4,7 @@ use rand::prelude::*;
 
 pub struct DeckPlugin;
 
-#[derive(Debug, Component)]
+#[derive(Debug, Default)]
 pub struct DeckState{
     pub deck_vec: Vec<Card>,
 }
@@ -23,10 +23,10 @@ impl Plugin for DeckPlugin {
 /// Generates 52 cards into a deck with 2 jokers
 /// # Panics
 /// Function panics if the vector length its trying to return is not 54
-fn get_deck(mut deck_init: ResMut<DeckState>) {
+fn get_deck(mut commands: Commands, mut deck_init: ResMut<DeckState>) {
     let mut rng = thread_rng();
     for suit in 0..=3{ //Generate 4 suits
-        for card_face in 0..=12{ //13 card faces for each suit (Ace-King)
+        for card_face in 1..=13{ //13 card faces for each suit (Ace-King)
             deck_init.deck_vec.push(Card::get_card(card_face, suit));
         }
     }
@@ -34,6 +34,8 @@ fn get_deck(mut deck_init: ResMut<DeckState>) {
     deck_init.deck_vec.push(Card::get_card(14, -1));
     assert_eq!(deck_init.deck_vec.len(), 54, "Deck::generate_deck Vector length has to equal 54, current length is {}", deck_init.deck_vec.len()); //Make sure we have 54 cards (52 + two Jokers)
     deck_init.deck_vec.shuffle(&mut rng); //shuffle deck
+    //println!("{:?}", deck_init.deck_vec);
+    //commands.insert_resource(deck_init);
 }
 
 impl DeckState {
