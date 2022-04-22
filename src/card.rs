@@ -1,10 +1,12 @@
+use bevy::prelude::*;
 
-#[derive(Debug)]
+
+#[derive(Debug, Component)]
 pub struct Card{
     pub value: i8,
     pub suit: CardSuit,
 }
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Component)]
 pub enum CardSuit{
     Diamond = 1,
     Clove,
