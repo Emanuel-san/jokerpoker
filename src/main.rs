@@ -1,32 +1,102 @@
+
 mod card;
 mod hand;
 mod deck;
+
 
 use hand::*;
 use deck::*;
 use card::*;
 
+#[derive(Debug)]
+pub struct CharHolder{
+    holder: Vec<char>
+}
+
+impl CharHolder{    
+    fn new() -> Self {
+        let new_holder = Vec::new();
+        
+        Self {
+            holder: new_holder
+        }
+    }
+}
 
 fn print_hand(hand_obj: &Hand) {
-
+    let mut face: u8 = 0;
+    let spade = '♠';
+    let mut card_hand: Vec<String> = Vec::new();
+    let mut char_holder:Vec<CharHolder> = Vec::new();
     for card in &hand_obj.hand_vec{
         match card.value {
             13 | 14 => (),
-            12 => print!("King of "),
-            11 => print!("Queen of "),
-            10 => print!("Jack of "),
-            0 => print!("Ace of "),
-            number => print!("{} of ", number + 1),
+            12 => face = 75,
+            11 => face = 81,
+            10 => face = 74,
+            0 => face = 65,
+            number => face = number + 1,
         };
-        match card.suit {
-            CardSuit::Joker => print!("Joker | "),
-            CardSuit::Diamond => print!("Diamonds | "),
-            CardSuit::Spade => print!("Spades | "),
-            CardSuit::Clove => print!("Cloves | "),
-            CardSuit::Heart => print!("Hearts | "),
+        // match card.suit {
+        //     CardSuit::Joker => print!("Joker | "),
+        //     CardSuit::Diamond => print!("Diamonds | "),
+        //     CardSuit::Spade => print!("Spades | "),
+        //     CardSuit::Clove => print!("Cloves | "),
+        //     CardSuit::Heart => print!("Hearts | "),
+        // }
+        if face > 10{
+            let drawn_card = format!("
+┌──────────────┐
+|{}             |
+|              |
+|              |
+|              |
+|       {}      |
+|              |
+|              |
+|              |
+|             {}|
+└──────────────┘", face as char, spade, face as char);
+            card_hand.push(drawn_card);
+        }
+        else{
+            let drawn_card = format!("
+┌──────────────┐
+|{}             |
+|              |
+|              |
+|              |
+|       {}      |
+|              |
+|              |
+|              |
+|             {}|
+└──────────────┘", face, spade, face);
+            card_hand.push(drawn_card);
         }
     }
-    println!("");
+
+
+    for i in 0..=4{
+        card_hand[i] = card_hand[i].replace("\n", "");  //176 chars per card
+        let mut new_holder = CharHolder::new();
+
+        for char in card_hand[i].chars(){
+            new_holder.holder.push(char);
+        }
+        char_holder.push(new_holder);
+    }
+    //print!("{:?}", char_holder);
+
+
+    for row in 0..11 {
+        for card in 0..5{
+            for char in (row * 16)..(row * 16) + 16{
+                print!("{}", char_holder[card].holder[char]);
+            }
+        }
+        println!("");
+    }
 }
 
 fn evaluate_hand(poker_hand: &Hand) -> &str{
@@ -131,10 +201,10 @@ fn main() {
 
     //println!("{}", deck_destructred.len());
 
-    print_hand(&five_card_hand);
+    //print_hand(&five_card_hand);
     five_card_hand.discard_card_from_hand(0);
     println!("");
-    print_hand(&five_card_hand);
+    //print_hand(&five_card_hand);
     five_card_hand.draw_until_five_cards(&mut deck_of_cards);
     println!("");
     print_hand(&five_card_hand);
@@ -143,9 +213,9 @@ fn main() {
     //     deck_vec: deck_destructred
     // } = &deck_of_cards;
     // println!("{}", deck_destructred.len());
-    five_card_hand.draw_until_five_cards(&mut deck_of_cards);
+    //five_card_hand.draw_until_five_cards(&mut deck_of_cards);
 
-    println!("{}", evaluate_hand(&five_card_hand));
+    //println!("{}", evaluate_hand(&five_card_hand));
     // let mut test_hand = Hand::new();
     // test_hand.hand_vec.push(Card::get_card(1, 2));
     // test_hand.hand_vec.push(Card::get_card(8, 1));
