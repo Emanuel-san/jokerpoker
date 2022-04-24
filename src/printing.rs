@@ -1,21 +1,19 @@
 use std::*;
 
+use crate::hand::*;
+
 #[derive(Debug)]
 pub struct CharHolder{
     holder: Vec<char>
 }
 
-impl CharHolder{    
-    fn new() -> Self {
-        let new_holder = Vec::new();
-        
-        Self {
-            holder: new_holder
-        }
-    }
-
-    pub fn format_card_to_string(face: Vec<u8>, suit: Vec<u8>) -> String{
-        let mut formated_card = format!("
+pub fn format_hand(vec_holder: &mut Vec<CharHolder>, hand: &Hand){
+    //let iter = &hand.hand_vec.into_iter().enumerate();
+for card in &hand.hand_vec {
+    let mut char_holder = CharHolder::new();
+    let face = card.get_face_bytes();
+    let suit = card.get_suit_bytes();
+    let mut formated_card = format!("
 ┌──────────────┐
 |{}            |
 |              |
@@ -28,11 +26,22 @@ impl CharHolder{
 |            {}|
 └──────────────┘", str::from_utf8(&face).unwrap(), str::from_utf8(&suit).unwrap(), str::from_utf8(&face).unwrap());
     formated_card = formated_card.replace("\n", "");
-    formated_card
+    char_holder.push_to_holder(&formated_card);
+    vec_holder.push(char_holder);
+    }
+}
+
+impl CharHolder{    
+    fn new() -> Self {
+        let new_holder = Vec::new();
+        
+        Self {
+            holder: new_holder
+        }
     }
 
     pub fn push_to_holder(&mut self, formated_card: &String){
-        
+
         for char in formated_card.chars() {
             self.holder.push(char)
         }
