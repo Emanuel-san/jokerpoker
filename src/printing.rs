@@ -26,7 +26,7 @@ for card in &hand.hand_vec {
 |            {}|
 └──────────────┘", str::from_utf8(&face).unwrap(), str::from_utf8(&suit).unwrap(), str::from_utf8(&face).unwrap());
     formated_card = formated_card.replace("\n", "");
-    char_holder.push_to_holder(&formated_card);
+    char_holder.format_string_to_chars(&formated_card);
     vec_holder.push(char_holder);
     }
 }
@@ -40,7 +40,7 @@ impl CharHolder{
         }
     }
 
-    pub fn push_to_holder(&mut self, formated_card: &String){
+    pub fn format_string_to_chars(&mut self, formated_card: &String){
 
         for char in formated_card.chars() {
             self.holder.push(char)
