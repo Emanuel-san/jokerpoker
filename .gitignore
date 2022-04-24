@@ -4,6 +4,3 @@
 #Ignore cargo binaries
 *.lock
 *.exe
-
-#Ignore dump test txt file for now
-temp.txt
