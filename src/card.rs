@@ -1,4 +1,6 @@
 
+
+
 #[derive(Debug)]
 pub struct Card{
     pub value: u8,
@@ -13,6 +15,11 @@ pub enum CardSuit{
     Joker
 }
 
+//convert bytes to integer
+fn convert_bytes_to_integer(bytes: &[u8]) -> u8{
+    u8::from_be_bytes(bytes.try_into().unwrap())
+}
+
 impl Card {
 
     //constructor
@@ -24,7 +31,6 @@ impl Card {
             suit
         }
     }
-
 
     pub fn get_card(card_value: u8, suit_value: u8) -> Card{
         let mut new_card = Card::new();
@@ -38,6 +44,33 @@ impl Card {
             _ => panic!("Card::generate_card: Failed choosing random suit")
         };
         new_card
+    }
+
+    pub fn get_face_bytes(&self) -> Vec<u8>{
+        let mut face = Vec::new();
+        match self.value {
+            14 => face = vec![74, 75],
+            13 => (),
+            12 => face = vec![75, 32],
+            11 => face = vec![81, 32],
+            10 => face = vec![74, 32],
+            9 => face = vec![49, 48],
+            0 => face = vec![65, 32],
+            number => face = vec![convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32],
+        }
+        face
+    }
+
+    pub fn get_suit_bytes(&self) -> Vec<u8>{
+        let mut suit = Vec::new();
+        match self.suit {
+            CardSuit::Joker => suit = vec![74],
+            CardSuit::Diamond => suit = vec![226, 153, 166],
+            CardSuit::Spade => suit = vec![226, 153, 160],
+            CardSuit::Clove => suit = vec![226, 153, 163],
+            CardSuit::Heart => suit = vec![226, 153, 165],
+        }
+        suit
     }
 }
 

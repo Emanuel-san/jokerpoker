@@ -10,7 +10,6 @@ pub struct Hand {
 
 impl Hand {
 
-    /*Constructor */
     fn new() -> Self {
         let hand_of_cards = Vec::new();
 

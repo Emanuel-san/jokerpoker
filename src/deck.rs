@@ -29,7 +29,7 @@ impl Deck {
         }
         deck_init.deck_vec.push(Card::get_card(14, 0)); //Allow 2 Jokers
         deck_init.deck_vec.push(Card::get_card(14, 0));
-        println!("{:?}", deck_init);
+        //println!("{:?}", deck_init);
         assert_eq!(deck_init.deck_vec.len(), 54, "Deck::generate_deck Vector length has to equal 54, current length is {}", deck_init.deck_vec.len()); //Make sure we have 54 cards (52 + two Jokers)
         deck_init.deck_vec.shuffle(&mut rng); //shuffle deck
         deck_init
