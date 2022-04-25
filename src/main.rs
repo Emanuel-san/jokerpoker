@@ -22,6 +22,4 @@ fn main() {
     format_hand(&mut holder, &five_card_hand);
     CharHolder::print_hand(&holder);
 
-
-
 }

@@ -1,5 +1,9 @@
 use crate::hand::*;
 use crate::card::*;
+enum MachineState{
+    Playing,
+    InsertCoin,
+}
 
 fn evaluate_hand(poker_hand: &Hand) -> &str{
     let mut suit_tracker = vec![0u8; 4];
