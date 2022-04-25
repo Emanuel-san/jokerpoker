@@ -26,7 +26,9 @@ for card in &hand.hand_vec {
 |            {}|
 └──────────────┘", str::from_utf8(&face).unwrap(), str::from_utf8(&suit).unwrap(), str::from_utf8(&face).unwrap());
     formated_card = formated_card.replace("\n", "");
+
     char_holder.format_string_to_chars(&formated_card);
+    
     vec_holder.push(char_holder);
     }
 }
