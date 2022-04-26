@@ -1,11 +1,11 @@
 use crate::hand::*;
 use crate::card::*;
-enum MachineState{
+pub enum MachineState{
     Playing,
     InsertCoin,
 }
 
-fn evaluate_hand(poker_hand: &Hand) -> &str{
+pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     let mut suit_tracker = vec![0u8; 4];
     let mut value_tracker = vec![0u8; 15];
     let mut jokers: u8 = 0;
@@ -40,10 +40,10 @@ fn evaluate_hand(poker_hand: &Hand) -> &str{
     //This is only for checking if we have a poker hand with a straight.
 
     while vec_pointer > 3{// If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight. 
-        let mut jokers_left = jokers; //Each time a sequence "fails" we will shadow this variable and re-declare jokers to use in the next sequence
-        let mut straight_cards = 0; // Same as above though we reset to 0 on "failed" sequence.
+        let mut jokers_left = jokers; //Each time a sequence "fails" we re-declare jokers to use in the next sequence
+        let mut straight_cards = 0; // Reset to 0 on "failed" sequence.
         for i in (0..vec_pointer).rev(){ // represents the sequence (0..ptr) = 0-13
-            if value_tracker[i] == 0 { // if element at index i is 0...
+            if value_tracker[i] == 0 { // if element at index is 0...
                 if jokers_left == 0 { // ...then we check if we have jokers left to use.
                     break; // If not then we break out.
                 }
