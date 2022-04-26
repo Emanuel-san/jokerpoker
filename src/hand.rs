@@ -10,7 +10,7 @@ pub struct Hand {
 
 impl Hand {
 
-    fn new() -> Self {
+    pub fn new() -> Self {
         let hand_of_cards = Vec::new();
 
         Self {
@@ -26,22 +26,8 @@ impl Hand {
                 None => panic!("Deck::draw_card_from_deck: Received a None option")
             }
         }
-        assert!(self.hand_vec.len() <= 5, "Hand::draw_until_five_cards:: Can not exit with a vector length greater then 5, exit occured with length {}", self.hand_vec.len());
+        assert!(self.hand_vec.len() == 5, "Hand::draw_until_five_cards:: Vector length is not 5, exit occured with length {}", self.hand_vec.len());
     }
-
-    pub fn draw_five_card_hand(deck_of_cards: &mut Deck) -> Hand{
-        let mut new_hand = Hand::new();
-        new_hand.draw_until_five_cards(deck_of_cards);
-        new_hand
-    }
-
-
-    // pub fn sort_hand_by_value(&mut self){
-    //     let Hand {
-    //         hand_vec: temp
-    //     } = self;
-    //     temp.sort_by(|a, b| a.value.cmp(&b.value));
-    // }
 
 
     pub fn discard_card_from_hand(&mut self, index: usize){
