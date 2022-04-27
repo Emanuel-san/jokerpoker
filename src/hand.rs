@@ -20,8 +20,7 @@ impl Hand {
 
     pub fn draw_until_five_cards(&mut self, deck_of_cards: &mut Deck){
         while self.hand_vec.len() < 5{
-            let drawn_card = deck_of_cards.deck_vec.pop();
-            match drawn_card {
+            match deck_of_cards.deck_vec.pop() {
                 Some(card) => self.hand_vec.push(card),
                 None => panic!("Deck::draw_card_from_deck: Received a None option")
             }
