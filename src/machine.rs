@@ -1,5 +1,7 @@
 use crate::hand::*;
 use crate::card::*;
+
+#[derive(PartialEq)]
 pub enum MachineState{
     Playing,
     InsertCoin,
