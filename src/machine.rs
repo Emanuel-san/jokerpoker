@@ -24,16 +24,12 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     }
 
     value_tracker[13] = value_tracker[0]; //We need to add aces to the highest value count aswell since we only count them as lowest value when counting in previous for loop.
-    //println!("Values: {:?}", value_tracker);
-    // println!("Suits: {:?}", suit_counter);
-    // println!("Jokers: {}", jokers);
 
     //filter out the suit_tracker where 0 values occur and collect the none zero values into a new vec (counted_suits)...
     let mut counted_suits = suit_tracker.into_iter()
     .filter(|&x| x > 0).collect::<Vec<_>>();
     counted_suits.sort_unstable();//... and sort it.
     counted_suits[0] += jokers; // add jokers to the index 0 incase they create a flush. (i.e index == 3 and we have 2 jokers, then we have a flush.)
-    //println!("{:?}", counted_suits);
     let is_flush = counted_suits[0] == 5; // If index 0 contains element 5 then we have a flush.
     let mut is_straight = false;
 
@@ -74,13 +70,10 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
                                                                             } else { 
                                                                                 (b.1).cmp(&a.1)}); //else sort by quantity
                                                                                 
-    //println!("{:?}", values_filtered);
     values_filtered[0].1 += jokers; //
     if values_filtered.len() == 1 {
     values_filtered.push((0, 0));
     }
-    //println!("{:?}", values_filtered);
- 
     match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
         (_,_,5,_) => "five-of-a-kind",
         (true, true, _, _) => if vec_pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
