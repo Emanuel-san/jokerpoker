@@ -12,39 +12,31 @@ use clearscreen::ClearScreen;
 use machine::*;
 use hand::*;
 use deck::*;
-use card::*;
 
 
 
 
 
 fn main() {
+    ClearScreen::default().clear().expect("failed to clear");
+    let mut state = MachineState::FundsAvailable;
 
-    let state = MachineState::Playing;
-
-    while state == MachineState::Playing {
+    while state == MachineState::FundsAvailable {
         let mut deck_of_cards = Deck::get_deck();
         let mut five_card_hand = Hand::new();
         five_card_hand.draw_until_five_cards(&mut deck_of_cards);
         let mut holder = format_hand(&five_card_hand);
         print_hand(&holder);
+        state = MachineState::CardSelection;
         
-        loop {
+        while state == MachineState::CardSelection {
             let mut input = UserInput::get_user_input();
-            if input.input_string.trim().to_lowercase() == "draw"{
-                break;
-            } else {
-                if let Ok(parsed_input) = input.parse_and_chk_select_input(){
-                    let mut card: &mut Card = &mut five_card_hand.hand_vec[parsed_input - 1];
-                    if card.selected == true {
-                        card.selected = false;
-                    } else {
-                        card.selected = true;
-                    }
-                }
-            }
-            holder = format_hand(&five_card_hand);
-            print_hand(&holder);
+            input.card_selection(&mut five_card_hand, &mut holder, &mut state);
         }
+        five_card_hand.discard_selected();
+        five_card_hand.draw_until_five_cards(&mut deck_of_cards);
+        holder = format_hand(&five_card_hand);
+        print_hand(&holder);
+        println!("{}", evaluate_hand(&five_card_hand));
     }
 }

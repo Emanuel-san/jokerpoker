@@ -1,5 +1,12 @@
 use std::io;
 
+use crate::utils::*;
+use crate::card::*;
+use crate::hand::*;
+use crate::CharHolder;
+use crate::machine::*;
+use clearscreen::ClearScreen;
+
 #[derive(PartialEq)]
 pub struct UserInput{
     pub input_string: String
@@ -30,6 +37,21 @@ impl UserInput {
             println!("Invalid input");
             return Err(())
        }
+    }
+
+    pub fn card_selection(&mut self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
+        if self.input_string.trim().to_lowercase() == "draw"{
+            ClearScreen::default().clear().expect("failed to clear");
+            *state = MachineState::FundsAvailable;
+        } else {
+            if let Ok(parsed_input) = self.parse_and_chk_select_input(){
+                ClearScreen::default().clear().expect("failed to clear");
+                let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
+                card.alter_selection();
+                *holder = format_hand(&hand);
+                print_hand(&holder);
+            }
+        }
     }
 }
 
