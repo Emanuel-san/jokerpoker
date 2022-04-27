@@ -3,8 +3,9 @@ use crate::card::*;
 
 #[derive(PartialEq)]
 pub enum MachineState{
-    Playing,
-    InsertCoin,
+    FundsAvailable,
+    CardSelection,
+    _InsertCoin,
 }
 
 pub fn evaluate_hand(poker_hand: &Hand) -> &str{
