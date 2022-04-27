@@ -14,7 +14,26 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder>{
         let mut char_holder = CharHolder::new();
         let face = card.get_face_bytes();
         let suit = card.get_suit_bytes();
-        let mut formated_card = format!("
+        if card.selected == true {
+            let mut formated_card = format!("
+┌──────────────┐
+|{}            |
+|   SELECTED   |
+|              |
+|              |
+|       {}      |
+|              |
+|              |
+|   SELECTED   |
+|            {}|
+└──────────────┘", str::from_utf8(&face).unwrap(), str::from_utf8(&suit).unwrap(), str::from_utf8(&face).unwrap());
+            formated_card = formated_card.replace("\n", "");
+
+            char_holder.format_string_to_chars(&formated_card);
+
+            vec_holder.push(char_holder);
+        } else {
+            let mut formated_card = format!("
 ┌──────────────┐
 |{}            |
 |              |
@@ -26,12 +45,13 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder>{
 |              |
 |            {}|
 └──────────────┘", str::from_utf8(&face).unwrap(), str::from_utf8(&suit).unwrap(), str::from_utf8(&face).unwrap());
-        formated_card = formated_card.replace("\n", "");
-
-        char_holder.format_string_to_chars(&formated_card);
-
-        vec_holder.push(char_holder);
+                        formated_card = formated_card.replace("\n", "");
+            
+                        char_holder.format_string_to_chars(&formated_card);
+            
+                        vec_holder.push(char_holder);
         }
+    }
     vec_holder
 }
 

@@ -5,6 +5,7 @@
 pub struct Card{
     pub value: u8,
     pub suit: CardSuit,
+    pub selected: bool,
 }
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CardSuit{
@@ -26,9 +27,11 @@ impl Card {
     fn new() -> Self {
         let value: u8 = 0;
         let suit = CardSuit::Joker;
+        let selected = false;
         Self {
             value,
-            suit
+            suit,
+            selected,
         }
     }
 

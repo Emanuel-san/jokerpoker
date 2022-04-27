@@ -19,21 +19,23 @@ use card::*;
 
 
 fn main() {
-    // let mut deck_of_cards = Deck::get_deck();
-    // let mut five_card_hand = Hand::new();
-    // let mut holder: Vec<CharHolder> = Vec::new();
-    // five_card_hand.draw_until_five_cards(&mut deck_of_cards);
-    // holder = format_hand(&five_card_hand);
+    let mut deck_of_cards = Deck::get_deck();
+    let mut five_card_hand = Hand::new();
+    let mut holder: Vec<CharHolder> = Vec::new();
+    five_card_hand.draw_until_five_cards(&mut deck_of_cards);
+    holder = format_hand(&five_card_hand);
     
-    // print_hand(&holder);
+    print_hand(&holder);
 
-    // five_card_hand.discard_card_from_hand(0);
-    // five_card_hand.draw_until_five_cards(&mut deck_of_cards);
-    // holder = format_hand(&five_card_hand);
-    // print_hand(&holder);
+    five_card_hand.discard_card_from_hand(0);
+    five_card_hand.draw_until_five_cards(&mut deck_of_cards);
+    five_card_hand.hand_vec[1].selected = true;
+    holder = format_hand(&five_card_hand);
+    print_hand(&holder);
+    //println!("{:?}", five_card_hand);
 
-    // println!("{}", evaluate_hand(&five_card_hand));
-    let mut input = UserInput::get_user_input().parse_input_to_digits();
+    println!("{}", evaluate_hand(&five_card_hand));
+    //let mut input = UserInput::get_user_input().parse_input_to_digits();
 
 
 }
