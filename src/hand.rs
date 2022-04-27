@@ -30,11 +30,18 @@ impl Hand {
     }
 
 
-    pub fn discard_card_from_hand(&mut self, index: usize){
-        if self.hand_vec.len() - 1 >= index {
+    pub fn discard_selected(&mut self){
+        let mut discards_indexed = Vec::new();
+
+        for (i, card) in self.hand_vec.iter().enumerate() {
+            if card.selected == true {
+                discards_indexed.push(i.clone());
+            }
+        }
+        discards_indexed.reverse();
+        
+        for index in discards_indexed {
             self.hand_vec.remove(index);
-        } else {
-            panic!("Hand::discard_card_from_hand: Index for removal is {} but vector length is {}", index, self.hand_vec.len());
         }
     }
 }
