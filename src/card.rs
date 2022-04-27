@@ -65,7 +65,7 @@ impl Card {
     }
 
     pub fn get_suit_bytes(&self) -> Vec<u8>{
-        let mut suit = Vec::new();
+        let suit: Vec<u8>;
         match self.suit {
             CardSuit::Joker => suit = vec![74],
             CardSuit::Diamond => suit = vec![226, 153, 166],
@@ -74,6 +74,14 @@ impl Card {
             CardSuit::Heart => suit = vec![226, 153, 165],
         }
         suit
+    }
+
+    pub fn alter_selection(&mut self){
+        if self.selected == false {
+            self.selected = true;
+        } else {
+            self.selected = false;
+        }
     }
 }
 
