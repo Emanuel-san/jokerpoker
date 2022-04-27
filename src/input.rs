@@ -1,11 +1,10 @@
-use std::{io, num::ParseIntError};
+use std::io;
 
-use crate::utils::CharHolder;
-
-const RADIX: u32 = 10;
 pub struct UserInput{
     input_string: String
 }
+
+#[derive(Debug)]
 pub struct UsableInput<T>{
     input: T
 }
@@ -23,20 +22,18 @@ impl UserInput {
         }
     }
 
-    fn retain_digits(&mut self){
-        self.input_string.retain(|a| a.is_digit(RADIX));
-    }
-
-    pub fn parse_input_to_digits(&mut self) //-> Result<UsableInput<Vec<u8>>, ParseIntError>
+    pub fn parse_and_chk_select_input(&mut self) -> Result<UsableInput<u8>, ()>
     {
-        self.retain_digits();
-        let mut input_digits:Vec<u32> = Vec::new(); 
-        for digit in self.input_string.chars().filter_map(|a| a.to_digit(RADIX)){
-            input_digits.push(digit);
-        }
-        
-
-        println!("{:?}", input_digits);
+       if let Ok(parsed_input) = self.input_string.trim().parse::<u8>(){
+           if parsed_input <= 5 && parsed_input >= 1{
+                return Ok(UsableInput{input: parsed_input})
+           }
+            println!("Invalid input");
+            return Err(())
+       } else {
+            println!("Invalid input");
+            return Err(())
+       }
     }
 }
 
