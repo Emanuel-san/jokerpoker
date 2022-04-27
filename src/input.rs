@@ -1,12 +1,8 @@
 use std::io;
 
+#[derive(PartialEq)]
 pub struct UserInput{
-    input_string: String
-}
-
-#[derive(Debug)]
-pub struct UsableInput<T>{
-    input: T
+    pub input_string: String
 }
 
 impl UserInput {
@@ -22,11 +18,11 @@ impl UserInput {
         }
     }
 
-    pub fn parse_and_chk_select_input(&mut self) -> Result<UsableInput<u8>, ()>
+    pub fn parse_and_chk_select_input(&mut self) -> Result<usize, ()>
     {
-       if let Ok(parsed_input) = self.input_string.trim().parse::<u8>(){
+       if let Ok(parsed_input) = self.input_string.trim().parse::<usize>(){
            if parsed_input <= 5 && parsed_input >= 1{
-                return Ok(UsableInput{input: parsed_input})
+                return Ok(parsed_input)
            }
             println!("Invalid input");
             return Err(())
@@ -34,13 +30,6 @@ impl UserInput {
             println!("Invalid input");
             return Err(())
        }
-    }
-}
-
-impl<T> UsableInput<T> {
-
-    pub fn contents(&self) -> &T{
-        &self.input
     }
 }
 
