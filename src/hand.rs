@@ -33,7 +33,7 @@ impl Hand {
         let mut discards_indexed = Vec::new();
 
         for (i, card) in self.hand_vec.iter().enumerate() {
-            if card.selected == true {
+            if card.selected == false {
                 discards_indexed.push(i.clone());
             }
         }
