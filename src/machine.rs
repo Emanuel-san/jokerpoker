@@ -3,7 +3,7 @@ use crate::card::*;
 
 #[derive(PartialEq)]
 pub enum MachineState{
-    FundsAvailable,
+    CoinsAvailable,
     CardSelection,
     _InsertCoin,
 }

@@ -42,7 +42,7 @@ impl UserInput {
     pub fn card_selection(&mut self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
         if self.input_string.trim().to_lowercase() == "draw"{
             ClearScreen::default().clear().expect("failed to clear");
-            *state = MachineState::FundsAvailable;
+            *state = MachineState::CoinsAvailable;
         } else {
             if let Ok(parsed_input) = self.parse_and_chk_select_input(){
                 ClearScreen::default().clear().expect("failed to clear");
