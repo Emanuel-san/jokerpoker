@@ -25,18 +25,28 @@ impl UserInput {
         }
     }
 
-    pub fn parse_and_chk_select_input(&mut self) -> Result<usize, ()>
+    pub fn parse_input(&mut self) -> Result<usize, ()>
     {
        if let Ok(parsed_input) = self.input_string.trim().parse::<usize>(){
-           if parsed_input <= 5 && parsed_input >= 1{
-                return Ok(parsed_input)
-           }
-            println!("Invalid input");
-            return Err(())
+            return Ok(parsed_input)
        } else {
             println!("Invalid input");
             return Err(())
        }
+    }
+
+    pub fn chk_select_input(&self) -> Result<usize, ()>{
+        if let Ok(parsed_input) = self.parse_input(){
+            if parsed_input <= 5 && parsed_input >= 1{
+                return Ok(parsed_input)
+           } else {
+            println!("Invalid input");
+            return Err(())
+           }
+        }else {
+            println!("Invalid input");
+            return Err(())
+        }
     }
 
     pub fn card_selection(&mut self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
