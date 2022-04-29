@@ -34,26 +34,26 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     let is_flush = counted_suits[0] == 5; // If index 0 contains element 5 then we have a flush.
     let mut is_straight = false;
 
-    let mut vec_pointer = 14;
+    let mut pointer = 14;
     //We use a "pointer" to avoid looking at cards again that was a part of another sequence.
     //This is only for checking if we have a poker hand with a straight.
 
-    while vec_pointer > 3{// If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight. 
+    while pointer > 3{// If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight. 
         let mut jokers_left = jokers; //Each time a sequence "fails" we re-declare jokers to use in the next sequence
         let mut straight_cards = 0; // Reset to 0 on "failed" sequence.
-        for i in (0..vec_pointer).rev(){ // represents the sequence (0..ptr) = 0-13
+        for i in (0..pointer).rev(){ // represents the sequence (0..ptr) = 0-13
             if value_tracker[i] == 0 { // if element at index is 0...
                 if jokers_left == 0 { // ...then we check if we have jokers left to use.
                     break; // If not then we break out.
                 }
                 jokers_left -= 1; //Remove joker if used
             }
-            else if i==vec_pointer-1 { //Since we use jokers we will only reduce vec_pointer if this is true, else its possible we miss a possible straight in the next sequence
-                vec_pointer -= 1;
+            else if i==pointer-1 { //Since we use jokers we will only reduce pointer if this is true, else its possible we miss a possible straight in the next sequence
+                pointer -= 1;
             }
             straight_cards += 1; //if we found a index with a none zero value or we used a joker, add 1 straight card.
         }
-        vec_pointer -= 1; //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
+        pointer -= 1; //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
         if straight_cards == 5 { // We have a straight!
             is_straight = true;
             break;
@@ -77,7 +77,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     }
     match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
         (_,_,5,_) => "five-of-a-kind",
-        (true, true, _, _) => if vec_pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
+        (true, true, _, _) => if pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
         (_,_,4,_) => "four-of-a-kind",
         (_,_,3,2) => "full-house",
         (true,_,_,_) => "flush",
