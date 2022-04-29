@@ -19,8 +19,9 @@ use deck::*;
 
 fn main() {
     ClearScreen::default().clear().expect("failed to clear");
+    let mut coins = 0;
     let mut state = MachineState::FundsAvailable;
-
+    print!("Insert coins to play: ");
     while state == MachineState::FundsAvailable {
         let mut deck_of_cards = Deck::get_deck();
         let mut five_card_hand = Hand::new();
