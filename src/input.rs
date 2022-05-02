@@ -25,41 +25,61 @@ impl UserInput {
         }
     }
 
-    pub fn parse_input(&mut self) -> Result<usize, ()>
+    pub fn parse_input(&self) -> Result<usize, ()>
     {
        if let Ok(parsed_input) = self.input_string.trim().parse::<usize>(){
-            return Ok(parsed_input)
+            Ok(parsed_input)
        } else {
             println!("Invalid input");
-            return Err(())
+            Err(())
        }
     }
 
     pub fn chk_select_input(&self) -> Result<usize, ()>{
-        if let Ok(parsed_input) = self.parse_input(){
-            if parsed_input <= 5 && parsed_input >= 1{
-                return Ok(parsed_input)
+
+        if let Ok(input) = self.parse_input(){
+            if input <= 5 && input >= 1{
+                Ok(input)
            } else {
-            println!("Invalid input");
-            return Err(())
+                Err(())
            }
         }else {
-            println!("Invalid input");
-            return Err(())
+            Err(())
         }
     }
 
-    pub fn card_selection(&mut self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
+    pub fn chk_draw_input(&self) -> Result<(), ()>{
         if self.input_string.trim().to_lowercase() == "draw"{
+            Ok(())
+        } else {
+            Err(())
+        }
+    }
+    pub fn chk_funds_input(&self) -> Result<usize, ()>{
+        if let Ok(input) = self.parse_input(){
+            if input == 1 || input == 2 || input == 5 || input == 10{
+                Ok(input)
+            } else {
+                Err(())
+            }
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn card_selection(&self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
+        if let Ok(()) = self.chk_draw_input(){
             ClearScreen::default().clear().expect("failed to clear");
             *state = MachineState::FundsAvailable;
         } else {
-            if let Ok(parsed_input) = self.parse_and_chk_select_input(){
+            if let Ok(parsed_input) = self.chk_select_input(){
                 ClearScreen::default().clear().expect("failed to clear");
                 let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
                 card.alter_selection();
                 *holder = format_hand(&hand);
                 print_hand(&holder);
+            } else {
+                println!("Invalid input");
             }
         }
     }
