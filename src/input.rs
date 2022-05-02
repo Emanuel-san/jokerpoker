@@ -1,12 +1,5 @@
 use std::io;
 
-use crate::utils::*;
-use crate::card::*;
-use crate::hand::*;
-use crate::CharHolder;
-use crate::machine::*;
-use clearscreen::ClearScreen;
-
 #[derive(PartialEq)]
 pub struct UserInput{
     pub input_string: String
@@ -55,6 +48,7 @@ impl UserInput {
             Err(())
         }
     }
+    
     pub fn chk_funds_input(&self) -> Result<usize, ()>{
         if let Ok(input) = self.parse_input(){
             if input == 1 || input == 2 || input == 5 || input == 10{
@@ -64,23 +58,6 @@ impl UserInput {
             }
         } else {
             Err(())
-        }
-    }
-
-    pub fn card_selection(&self, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
-        if let Ok(()) = self.chk_draw_input(){
-            ClearScreen::default().clear().expect("failed to clear");
-            *state = MachineState::FundsAvailable;
-        } else {
-            if let Ok(parsed_input) = self.chk_select_input(){
-                ClearScreen::default().clear().expect("failed to clear");
-                let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
-                card.alter_selection();
-                *holder = format_hand(&hand);
-                print_hand(&holder);
-            } else {
-                println!("Invalid input");
-            }
         }
     }
 }
