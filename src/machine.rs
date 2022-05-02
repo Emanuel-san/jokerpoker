@@ -1,11 +1,50 @@
+use clearscreen::ClearScreen;
+
 use crate::hand::*;
 use crate::card::*;
+use crate::input::*;
+use crate::utils::*;
+
+
 
 #[derive(PartialEq)]
 pub enum MachineState{
     FundsAvailable,
     CardSelection,
-    _InsertCoin,
+    InsertCoin,
+}
+
+pub fn receive_funds(input: &UserInput ,funds: &mut usize, state: &mut MachineState) {
+    if let Ok(()) = input.chk_draw_input(){
+        ClearScreen::default().clear().expect("failed to clear");
+        *state = MachineState::FundsAvailable;
+    } else {
+        if let Ok(input) = input.chk_funds_input(){
+            ClearScreen::default().clear().expect("failed to clear");
+            print_insert_coin();
+            *funds += input;
+        } else {
+            println!("Invalid input");
+        }
+    }
+    
+}
+
+pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
+    if let Ok(()) = input.chk_draw_input(){
+        ClearScreen::default().clear().expect("failed to clear");
+        *state = MachineState::FundsAvailable;
+    } else {
+        if let Ok(parsed_input) = input.chk_select_input(){
+            ClearScreen::default().clear().expect("failed to clear");
+            let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
+            card.alter_selection();
+            *holder = format_hand(&hand);
+            print_hand(&holder);
+        } else {
+            println!("Invalid input");
+        }
+    }
 }
 
 pub fn evaluate_hand(poker_hand: &Hand) -> &str{
@@ -59,7 +98,6 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
             break;
         }
     }
-
 
     //filter out values that are 0
     // iterate over the vector, enumerate (index, value), but only iterate over 14 first indexes (else we enumarete jokers also)
