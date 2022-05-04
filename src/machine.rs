@@ -5,7 +5,9 @@ use crate::card::*;
 use crate::input::*;
 use crate::utils::*;
 
-
+pub struct Funds{
+    pub coins: usize,
+}
 
 #[derive(PartialEq)]
 pub enum MachineState{
@@ -14,32 +16,58 @@ pub enum MachineState{
     InsertCoin,
 }
 
-pub fn receive_funds(input: &UserInput ,funds: &mut usize, state: &mut MachineState) {
-    if let Ok(()) = input.chk_draw_input(){
-        ClearScreen::default().clear().expect("failed to clear");
-        *state = MachineState::FundsAvailable;
-    } else {
-        if let Ok(input) = input.chk_funds_input(){
-            ClearScreen::default().clear().expect("failed to clear");
-            print_insert_coin();
-            *funds += input;
-        } else {
-            println!("Invalid input");
+impl Funds {
+    pub fn new() -> Self {
+        let funds: usize = 0;
+
+        Self {
+            coins: funds,
         }
     }
-    
+    pub fn chk_funds(&mut self, state: &mut MachineState){
+        if self.coins == 0{
+            ClearScreen::default().clear().expect("failed to clear terminal");
+            *state = MachineState::InsertCoin;
+            print_insert_coin();
+        }
+    }
+    pub fn reduce_funds(&mut self){
+        self.coins -= 1;
+    }
+
+    pub fn add_funds(input: &UserInput ,funds: &mut Funds, state: &mut MachineState) {
+        if let Ok(()) = input.chk_draw_input(){
+            if funds.coins > 0{
+                ClearScreen::default().clear().expect("failed to clear terminal");
+                *state = MachineState::FundsAvailable;
+            } else {
+                println!("No available funds");
+            }
+        } else {
+            if let Ok(input) = input.chk_funds_input(){
+                ClearScreen::default().clear().expect("failed to clear terminal");
+                print_insert_coin();
+                funds.coins += input;
+            } else {
+                println!("Invalid input");
+            }
+        }
+        
+    }
 }
 
-pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState){
+
+pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState, funds: &Funds){
     if let Ok(()) = input.chk_draw_input(){
-        ClearScreen::default().clear().expect("failed to clear");
+        ClearScreen::default().clear().expect("failed to clear terminal");
         *state = MachineState::FundsAvailable;
     } else {
         if let Ok(parsed_input) = input.chk_select_input(){
-            ClearScreen::default().clear().expect("failed to clear");
+            ClearScreen::default().clear().expect("failed to clear terminal");
             let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
             card.alter_selection();
             *holder = format_hand(&hand);
+            println!("Funds: {}", funds.coins);
             print_hand(&holder);
         } else {
             println!("Invalid input");
@@ -48,8 +76,8 @@ pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharH
 }
 
 pub fn evaluate_hand(poker_hand: &Hand) -> &str{
-    let mut suit_tracker = vec![0u8; 4];
-    let mut value_tracker = vec![0u8; 15];
+    let mut suit_tracker = [0u8; 4];
+    let mut value_tracker = [0u8; 15];
     let mut jokers: u8 = 0;
 
     for card in &poker_hand.hand_vec{
