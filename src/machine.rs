@@ -9,6 +9,25 @@ pub struct Funds{
     pub coins: usize,
 }
 
+pub struct Evaluation {
+    hand_value: usize,
+    hand_type: WinningHand,
+}
+
+pub enum WinningHand{
+    FiveOfAKind,
+    RoyalFlush,
+    StraightFlush,
+    FourOfAKind,
+    FullHouse,
+    Flush,
+    Straight,
+    ThreeOfAkind,
+    TwoPair,
+    OnePair,
+    HighCard
+}
+
 #[derive(PartialEq)]
 pub enum MachineState{
     FundsAvailable,
@@ -16,12 +35,24 @@ pub enum MachineState{
     InsertCoin,
 }
 
+impl Evaluation {
+    pub fn new(hand_value: usize, hand_type: WinningHand) -> Self {
+
+        Self {
+            hand_value,
+            hand_type
+        }
+    }
+}
+
+
 impl Funds {
     pub fn new() -> Self {
         let funds: usize = 0;
 
         Self {
             coins: funds,
+
         }
     }
     pub fn chk_funds(&mut self, state: &mut MachineState){
@@ -75,7 +106,7 @@ pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharH
     }
 }
 
-pub fn evaluate_hand(poker_hand: &Hand) -> &str{
+pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation{
     let mut suit_tracker = [0u8; 4];
     let mut value_tracker = [0u8; 15];
     let mut jokers: u8 = 0;
@@ -141,16 +172,22 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     if values_filtered.len() == 1 {
     values_filtered.push((0, 0));
     }
-    match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
-        (_,_,5,_) => "five-of-a-kind",
-        (true, true, _, _) => if vec_pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
-        (_,_,4,_) => "four-of-a-kind",
-        (_,_,3,2) => "full-house",
-        (true,_,_,_) => "flush",
-        (_,true,_,_) => "straight",
-        (_,_,3,_) => "three-of-a-kind",
-        (_,_,2,2) => "two-pair",
-        (_,_,2,_) => "one-pair",
-        _ => "high-card"
-     }
+    let new_evaluation = match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
+        (_,_,5,_) => Evaluation::new(1, WinningHand::FiveOfAKind),
+        (true, true, _, _) => 
+            if vec_pointer == 8 {
+                Evaluation::new(1, WinningHand::RoyalFlush)
+            } else {
+                Evaluation::new(1, WinningHand::StraightFlush)// if a joker was used then its only a straight flush
+            },
+        (_,_,4,_) => Evaluation::new(1, WinningHand::FourOfAKind),
+        (_,_,3,2) => Evaluation::new(1, WinningHand::FullHouse),
+        (true,_,_,_) => Evaluation::new(1, WinningHand::Flush),
+        (_,true,_,_) => Evaluation::new(1, WinningHand::Straight),
+        (_,_,3,_) => Evaluation::new(1, WinningHand::ThreeOfAkind),
+        (_,_,2,2) => Evaluation::new(1, WinningHand::TwoPair),
+        (_,_,2,_) => Evaluation::new(1, WinningHand::OnePair),
+        _ => Evaluation::new(1, WinningHand::HighCard)
+    };
+    new_evaluation
 }
