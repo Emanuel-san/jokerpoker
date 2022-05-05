@@ -22,9 +22,9 @@ fn main() {
     let mut current_funds = Funds::new();
     let mut state = MachineState::InsertCoin;
     print_insert_coin();
-    
+
     while state == MachineState::InsertCoin{
-        println!("Funds: {}", current_funds.coins);
+        println!("CREDITS: {}", current_funds.credits);
         let funds_input = UserInput::get_user_input();
         Funds::add_funds(&funds_input, &mut current_funds, &mut state);
 
@@ -34,7 +34,7 @@ fn main() {
             let mut five_card_hand = Hand::new();
             five_card_hand.draw_until_five_cards(&mut deck_of_cards);
             let mut holder = format_hand(&five_card_hand);
-            println!("Funds: {}", current_funds.coins);
+            println!("CREDITS: {}", current_funds.credits);
             print_hand(&holder);
             state = MachineState::CardSelection;
             
@@ -47,7 +47,8 @@ fn main() {
             five_card_hand.draw_until_five_cards(&mut deck_of_cards);
             holder = format_hand(&five_card_hand);
             print_hand(&holder);
-            println!("{}", evaluate_hand(&five_card_hand));
+            let evaluation = evaluate_hand(&five_card_hand);
+            evaluation.print_and_add_win(&mut current_funds);
             current_funds.chk_funds(&mut state);
         }
     }
