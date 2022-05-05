@@ -16,7 +16,7 @@ pub enum CardSuit{
     Joker
 }
 
-//convert bytes to integer
+///convert bytes to u8 integer
 fn convert_bytes_to_integer(bytes: &[u8]) -> u8{
     u8::from_be_bytes(bytes.try_into().unwrap())
 }
@@ -25,13 +25,11 @@ impl Card {
 
     //constructor
     fn new() -> Self {
-        let value: u8 = 0;
-        let suit = CardSuit::Joker;
-        let selected = false;
+        
         Self {
-            value,
-            suit,
-            selected,
+            value: 0,
+            suit: CardSuit::Joker,
+            selected: false,
         }
     }
 

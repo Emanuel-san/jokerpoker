@@ -41,10 +41,9 @@ impl Evaluation {
 
 impl Funds {
     pub fn new() -> Self {
-        let credits: usize = 0;
 
         Self {
-            credits,
+            credits: 0,
 
         }
     }

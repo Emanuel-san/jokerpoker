@@ -79,10 +79,8 @@ pub fn print_hand(vec_of_charholder: &Vec<CharHolder>){
 
 impl CharHolder{    
     fn new() -> Self {
-        let new_holder = Vec::new();
-        
         Self {
-            holder: new_holder
+            holder: Vec::new()
         }
     }
 
