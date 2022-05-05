@@ -11,21 +11,7 @@ pub struct Funds{
 
 pub struct Evaluation {
     hand_value: usize,
-    hand_type: WinningHand,
-}
-
-pub enum WinningHand{
-    FiveOfAKind,
-    RoyalFlush,
-    StraightFlush,
-    FourOfAKind,
-    FullHouse,
-    Flush,
-    Straight,
-    ThreeOfAkind,
-    TwoPair,
-    OnePair,
-    HighCard
+    hand_type: String,
 }
 
 #[derive(PartialEq)]
@@ -36,7 +22,7 @@ pub enum MachineState{
 }
 
 impl Evaluation {
-    pub fn new(hand_value: usize, hand_type: WinningHand) -> Self {
+    pub fn new(hand_value: usize, hand_type: String) -> Self {
 
         Self {
             hand_value,
@@ -173,21 +159,21 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation{
     values_filtered.push((0, 0));
     }
     let new_evaluation = match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
-        (_,_,5,_) => Evaluation::new(1, WinningHand::FiveOfAKind),
+        (_,_,5,_) => Evaluation::new(1, String::from("Five Of A Kind")),
         (true, true, _, _) => 
             if vec_pointer == 8 {
-                Evaluation::new(1, WinningHand::RoyalFlush)
+                Evaluation::new(1, String::from("Royal Flush"))
             } else {
-                Evaluation::new(1, WinningHand::StraightFlush)// if a joker was used then its only a straight flush
+                Evaluation::new(1, String::from("Straight Flush"))// if a joker was used then its only a straight flush
             },
-        (_,_,4,_) => Evaluation::new(1, WinningHand::FourOfAKind),
-        (_,_,3,2) => Evaluation::new(1, WinningHand::FullHouse),
-        (true,_,_,_) => Evaluation::new(1, WinningHand::Flush),
-        (_,true,_,_) => Evaluation::new(1, WinningHand::Straight),
-        (_,_,3,_) => Evaluation::new(1, WinningHand::ThreeOfAkind),
-        (_,_,2,2) => Evaluation::new(1, WinningHand::TwoPair),
-        (_,_,2,_) => Evaluation::new(1, WinningHand::OnePair),
-        _ => Evaluation::new(1, WinningHand::HighCard)
+        (_,_,4,_) => Evaluation::new(1, String::from("Four Of A Kind")),
+        (_,_,3,2) => Evaluation::new(1, String::from("Full House")),
+        (true,_,_,_) => Evaluation::new(1, String::from("Flush")),
+        (_,true,_,_) => Evaluation::new(1, String::from("Straight")),
+        (_,_,3,_) => Evaluation::new(1, String::from("Three Of A Kind")),
+        (_,_,2,2) => Evaluation::new(1, String::from("Two Pair")),
+        (_,_,2,_) => Evaluation::new(1, String::from("One Pair")),
+        _ => Evaluation::new(1, String::from("High Card"))
     };
     new_evaluation
 }
