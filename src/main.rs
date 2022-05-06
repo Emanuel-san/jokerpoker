@@ -26,7 +26,7 @@ fn main() {
     while state == MachineState::InsertCoin{
         println!("CREDITS: {}", current_funds.credits);
         let funds_input = UserInput::get_user_input();
-        Funds::add_funds(&funds_input, &mut current_funds, &mut state);
+        current_funds.add_funds(&funds_input, &mut state);
 
         while state == MachineState::CoinsAvailable {
             current_funds.reduce_funds();
