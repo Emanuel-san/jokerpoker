@@ -58,9 +58,9 @@ impl Funds {
         self.credits -= 1;
     }
 
-    pub fn add_funds(input: &UserInput ,funds: &mut Funds, state: &mut MachineState) {
+    pub fn add_funds(&mut self, input: &UserInput, state: &mut MachineState) {
         if let Ok(()) = input.chk_draw_input(){
-            if funds.credits > 0{
+            if self.credits > 0{
                 ClearScreen::default().clear().expect("failed to clear terminal");
                 *state = MachineState::CoinsAvailable;
             } else {
@@ -70,7 +70,7 @@ impl Funds {
             if let Ok(input) = input.chk_funds_input(){
                 ClearScreen::default().clear().expect("failed to clear terminal");
                 print_insert_coin();
-                funds.credits += input;
+                self.credits += input;
             } else {
                 println!("Invalid input");
             }
