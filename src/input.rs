@@ -23,7 +23,6 @@ impl UserInput {
        if let Ok(parsed_input) = self.input_string.trim().parse::<usize>(){
             Ok(parsed_input)
        } else {
-            println!("Invalid input");
             Err(())
        }
     }
