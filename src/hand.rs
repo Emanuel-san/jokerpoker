@@ -11,10 +11,9 @@ pub struct Hand {
 impl Hand {
 
     pub fn new() -> Self {
-        let hand_of_cards = Vec::new();
-
+        
         Self {
-            hand_vec: hand_of_cards
+            hand_vec: Vec::new()
         }
     }
 

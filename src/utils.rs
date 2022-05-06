@@ -7,6 +7,17 @@ pub struct CharHolder{
     holder: Vec<char>
 }
 
+pub fn print_insert_coin(){
+    println!("
+██ ███    ██ ███████ ███████ ██████  ████████      ██████  ██████  ██ ███    ██ 
+██ ████   ██ ██      ██      ██   ██    ██        ██      ██    ██ ██ ████   ██ 
+██ ██ ██  ██ ███████ █████   ██████     ██        ██      ██    ██ ██ ██ ██  ██ 
+██ ██  ██ ██      ██ ██      ██   ██    ██        ██      ██    ██ ██ ██  ██ ██ 
+██ ██   ████ ███████ ███████ ██   ██    ██         ██████  ██████  ██ ██   ████
+Accepted values of funds: 1, 2, 5 and 10.
+")
+}
+
 pub fn format_hand(hand: &Hand) -> Vec<CharHolder>{
     
     let mut vec_holder: Vec<CharHolder> = Vec::new();
@@ -68,10 +79,8 @@ pub fn print_hand(vec_of_charholder: &Vec<CharHolder>){
 
 impl CharHolder{    
     fn new() -> Self {
-        let new_holder = Vec::new();
-        
         Self {
-            holder: new_holder
+            holder: Vec::new()
         }
     }
 

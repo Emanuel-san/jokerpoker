@@ -10,10 +10,9 @@ impl Deck {
 
     ///Deck constructor
     fn new() -> Self{
-        let deck_of_cards = Vec::new();
 
         Self{
-            deck_vec: deck_of_cards,
+            deck_vec: Vec::new(),
         }
     }
     /// Generates 52 cards into a deck with 2 jokers

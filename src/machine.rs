@@ -1,16 +1,106 @@
+use clearscreen::ClearScreen;
+
 use crate::hand::*;
 use crate::card::*;
+use crate::input::*;
+use crate::utils::*;
+
+pub struct Funds{
+    pub credits: usize,
+}
+
+pub struct Evaluation {
+    hand_value: usize,
+    hand_type: String,
+}
 
 #[derive(PartialEq)]
 pub enum MachineState{
     CoinsAvailable,
     CardSelection,
-    _InsertCoin,
+    InsertCoin,
 }
 
-pub fn evaluate_hand(poker_hand: &Hand) -> &str{
-    let mut suit_tracker = vec![0u8; 4];
-    let mut value_tracker = vec![0u8; 15];
+impl Evaluation {
+    pub fn new(hand_value: usize, hand_type: String) -> Self {
+
+        Self {
+            hand_value,
+            hand_type
+        }
+    }
+
+    pub fn print_and_add_win(&self, funds: &mut Funds){
+        if self.hand_value > 0 {
+            println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
+            funds.credits += self.hand_value;
+        }
+    }
+}
+
+
+impl Funds {
+    pub fn new() -> Self {
+
+        Self {
+            credits: 0,
+
+        }
+    }
+    pub fn chk_funds(&mut self, state: &mut MachineState){
+        if self.credits == 0{
+            ClearScreen::default().clear().expect("failed to clear terminal");
+            *state = MachineState::InsertCoin;
+            print_insert_coin();
+        }
+    }
+    pub fn reduce_funds(&mut self){
+        self.credits -= 1;
+    }
+
+    pub fn add_funds(input: &UserInput ,funds: &mut Funds, state: &mut MachineState) {
+        if let Ok(()) = input.chk_draw_input(){
+            if funds.credits > 0{
+                ClearScreen::default().clear().expect("failed to clear terminal");
+                *state = MachineState::FundsAvailable;
+            } else {
+                println!("No available funds");
+            }
+        } else {
+            if let Ok(input) = input.chk_funds_input(){
+                ClearScreen::default().clear().expect("failed to clear terminal");
+                print_insert_coin();
+                funds.credits += input;
+            } else {
+                println!("Invalid input");
+            }
+        }
+        
+    }
+}
+
+
+pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState, funds: &Funds){
+    if let Ok(()) = input.chk_draw_input(){
+        ClearScreen::default().clear().expect("failed to clear terminal");
+        *state = MachineState::FundsAvailable;
+    } else {
+        if let Ok(parsed_input) = input.chk_select_input(){
+            ClearScreen::default().clear().expect("failed to clear terminal");
+            let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
+            card.alter_selection();
+            *holder = format_hand(&hand);
+            println!("Funds: {}", funds.credits);
+            print_hand(&holder);
+        } else {
+            println!("Invalid input");
+        }
+    }
+}
+
+pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation{
+    let mut suit_tracker = [0u8; 4];
+    let mut value_tracker = [0u8; 15];
     let mut jokers: u8 = 0;
 
     for card in &poker_hand.hand_vec{
@@ -60,7 +150,6 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
         }
     }
 
-
     //filter out values that are 0
     // iterate over the vector, enumerate (index, value), but only iterate over 14 first indexes (else we enumarete jokers also)
     // filter out any enumeration that had a value of 0 and collect them into a vector.
@@ -75,16 +164,22 @@ pub fn evaluate_hand(poker_hand: &Hand) -> &str{
     if values_filtered.len() == 1 {
     values_filtered.push((0, 0));
     }
-    match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
-        (_,_,5,_) => "five-of-a-kind",
-        (true, true, _, _) => if pointer == 8 {"royal-flush"} else {"straight-flush"}, // if a joker was used then its only a straight flush
-        (_,_,4,_) => "four-of-a-kind",
-        (_,_,3,2) => "full-house",
-        (true,_,_,_) => "flush",
-        (_,true,_,_) => "straight",
-        (_,_,3,_) => "three-of-a-kind",
-        (_,_,2,2) => "two-pair",
-        (_,_,2,_) => "one-pair",
-        _ => "high-card"
-     }
+    let new_evaluation = match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
+        (_,_,5,_) => Evaluation::new(100, String::from("Five Of A Kind")),
+        (true, true, _, _) => 
+            if vec_pointer == 8 {
+                Evaluation::new(250, String::from("Royal Flush"))
+            } else {
+                Evaluation::new(50, String::from("Straight Flush"))// if a joker was used then its only a straight flush
+            },
+        (_,_,4,_) => Evaluation::new(25, String::from("Four Of A Kind")),
+        (_,_,3,2) => Evaluation::new(9, String::from("Full House")),
+        (true,_,_,_) => Evaluation::new(6, String::from("Flush")),
+        (_,true,_,_) => Evaluation::new(4, String::from("Straight")),
+        (_,_,3,_) => Evaluation::new(3, String::from("Three Of A Kind")),
+        (_,_,2,2) => Evaluation::new(2, String::from("Two Pair")),
+        (_,_,2,_) => Evaluation::new(1, String::from("Jacks Or Better")),
+        _ => Evaluation::new(0, String::from("High Card"))
+    };
+    new_evaluation
 }
