@@ -48,10 +48,9 @@ impl Card {
     }
 
     pub fn get_face_bytes(&self) -> Vec<u8>{
-        let mut face = Vec::new();
+        let face: Vec<u8>;
         match self.value {
             14 => face = vec![74, 75],
-            13 => (),
             12 => face = vec![75, 32],
             11 => face = vec![81, 32],
             10 => face = vec![74, 32],
