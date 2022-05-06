@@ -28,7 +28,7 @@ fn main() {
         let funds_input = UserInput::get_user_input();
         Funds::add_funds(&funds_input, &mut current_funds, &mut state);
 
-        while state == MachineState::FundsAvailable {
+        while state == MachineState::CoinsAvailable {
             current_funds.reduce_funds();
             let mut deck_of_cards = Deck::get_deck();
             let mut five_card_hand = Hand::new();

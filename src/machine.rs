@@ -62,7 +62,7 @@ impl Funds {
         if let Ok(()) = input.chk_draw_input(){
             if funds.credits > 0{
                 ClearScreen::default().clear().expect("failed to clear terminal");
-                *state = MachineState::FundsAvailable;
+                *state = MachineState::CoinsAvailable;
             } else {
                 println!("No available funds");
             }
@@ -83,7 +83,7 @@ impl Funds {
 pub fn card_selection(input: &UserInput, hand: &mut Hand, holder: &mut Vec<CharHolder>, state: &mut MachineState, funds: &Funds){
     if let Ok(()) = input.chk_draw_input(){
         ClearScreen::default().clear().expect("failed to clear terminal");
-        *state = MachineState::FundsAvailable;
+        *state = MachineState::CoinsAvailable;
     } else {
         if let Ok(parsed_input) = input.chk_select_input(){
             ClearScreen::default().clear().expect("failed to clear terminal");
@@ -167,7 +167,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation{
     let new_evaluation = match (is_flush, is_straight, values_filtered[0].1, values_filtered[1].1){
         (_,_,5,_) => Evaluation::new(100, String::from("Five Of A Kind")),
         (true, true, _, _) => 
-            if vec_pointer == 8 {
+            if pointer == 8 {
                 Evaluation::new(250, String::from("Royal Flush"))
             } else {
                 Evaluation::new(50, String::from("Straight Flush"))// if a joker was used then its only a straight flush
