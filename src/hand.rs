@@ -13,18 +13,22 @@ impl Hand {
         }
     }
 
-    pub fn draw_until_five_cards(&mut self, deck_of_cards: &mut Deck) {
+    pub fn draw_until_five_cards(&mut self, mut deck_of_cards: &mut Deck) {
         while self.hand_vec.len() < 5 {
-            match deck_of_cards.deck_vec.pop() {
-                Some(card) => self.hand_vec.push(card),
-                None => panic!("Deck::draw_card_from_deck: Received a None option"),
-            }
+            self.draw_card(&mut deck_of_cards)
         }
         assert!(
             self.hand_vec.len() == 5,
             "Hand::draw_until_five_cards:: Vector length is not 5, exit occured with length {}",
             self.hand_vec.len()
         );
+    }
+
+    pub fn draw_card(&mut self, deck_of_cards: &mut Deck) {
+        match deck_of_cards.deck_vec.pop() {
+            Some(card) => self.hand_vec.push(card),
+            None => panic!("Deck::draw_card_from_deck: Received a None option"),
+        }
     }
 
     pub fn discard_selected(&mut self) {
