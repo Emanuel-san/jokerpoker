@@ -34,7 +34,7 @@ impl Evaluation {
             println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
             *state = MachineState::Win;
         } else {
-            println!("No win, {}", self.hand_type);
+            println!("No win");
         }
     }
 }
@@ -143,6 +143,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
     if values_filtered.len() == 1 {
         values_filtered.push((0, 0));
     }
+    println!("Debug filtered values: {:?}", values_filtered);
     let new_evaluation = match (
         is_flush,
         is_straight,
@@ -163,8 +164,14 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         (_, true, _, _) => Evaluation::new(4, String::from("Straight")),
         (_, _, 3, _) => Evaluation::new(3, String::from("Three Of A Kind")),
         (_, _, 2, 2) => Evaluation::new(2, String::from("Two Pair")),
-        (_, _, 2, _) => Evaluation::new(1, String::from("Jacks Or Better")),
-        _ => Evaluation::new(0, String::from("High Card")),
+        (_, _, 2, _) => {
+            if values_filtered[0].0 == 0 || values_filtered[0].0 >= 10 {
+                Evaluation::new(1, String::from("Jacks Or Better"))
+            } else {
+                Evaluation::new(0, String::from(""))
+            }
+        }
+        _ => Evaluation::new(0, String::from("")),
     };
     new_evaluation
 }
