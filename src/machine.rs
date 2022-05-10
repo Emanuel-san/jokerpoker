@@ -12,8 +12,10 @@ pub struct Funds {
 pub struct Evaluation {
     hand_value: usize,
     hand_type: String,
-    win_state: Won,
+    pub win_state: Won,
 }
+
+#[derive(PartialEq)]
 pub enum Won {
     Win,
     NoWin,
@@ -37,9 +39,11 @@ impl Evaluation {
     }
 
     pub fn print_evaluation(&self /*funds: &mut Funds*/) {
-        if self.hand_value > 0 {
+        if self.win_state == Won::Win {
             println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
             //funds.credits += self.hand_value;
+        } else {
+            println!("No win, {}", self.hand_type);
         }
     }
 }
