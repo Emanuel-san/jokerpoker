@@ -106,4 +106,27 @@ impl UserInput {
             }
         }
     }
+
+    pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
+        if let Ok(()) = self.chk_draw_input() {
+            if funds.credits > 0 {
+                ClearScreen::default()
+                    .clear()
+                    .expect("failed to clear terminal");
+                *state = MachineState::CoinsAvailable;
+            } else {
+                println!("No available funds");
+            }
+        } else {
+            if let Ok(input) = self.chk_parsed_funds_input() {
+                ClearScreen::default()
+                    .clear()
+                    .expect("failed to clear terminal");
+                funds.add_funds(input);
+                print_insert_coin();
+            } else {
+                println!("Invalid input");
+            }
+        }
+    }
 }

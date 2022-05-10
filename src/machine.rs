@@ -1,6 +1,5 @@
 use crate::card::*;
 use crate::hand::*;
-use crate::input::*;
 use crate::utils::*;
 use clearscreen::ClearScreen;
 
@@ -66,29 +65,6 @@ impl Funds {
 
     pub fn add_funds(&mut self, funds_to_add: usize) {
         self.credits += funds_to_add;
-    }
-
-    pub fn chk_funds_input(&mut self, input: &UserInput, state: &mut MachineState) {
-        if let Ok(()) = input.chk_draw_input() {
-            if self.credits > 0 {
-                ClearScreen::default()
-                    .clear()
-                    .expect("failed to clear terminal");
-                *state = MachineState::CoinsAvailable;
-            } else {
-                println!("No available funds");
-            }
-        } else {
-            if let Ok(input) = input.chk_parsed_funds_input() {
-                ClearScreen::default()
-                    .clear()
-                    .expect("failed to clear terminal");
-                self.add_funds(input);
-                print_insert_coin();
-            } else {
-                println!("Invalid input");
-            }
-        }
     }
 }
 
