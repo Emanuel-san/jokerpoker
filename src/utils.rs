@@ -1,4 +1,5 @@
 use crate::hand::*;
+use crate::machine::*;
 use std::*;
 
 #[derive(Debug)]
@@ -99,7 +100,8 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
     vec_holder
 }
 
-pub fn print_hand(vec_of_charholder: &Vec<CharHolder>) {
+pub fn print_hand_and_credits(vec_of_charholder: &Vec<CharHolder>, current_funds: &Funds) {
+    println!("CREDITS: {}", current_funds.credits);
     for row in 0..11 {
         for card in vec_of_charholder {
             for char in (row * 16)..(row * 16) + 16 {
