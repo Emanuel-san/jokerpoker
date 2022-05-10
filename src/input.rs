@@ -45,7 +45,7 @@ impl UserInput {
         }
     }
 
-    pub fn chk_funds_input(&self) -> Result<usize, ()> {
+    pub fn chk_parsed_funds_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
             if input == 1 || input == 2 || input == 5 || input == 10 {
                 Ok(input)

@@ -23,7 +23,7 @@ fn main() {
     while state == MachineState::InsertCoin {
         println!("CREDITS: {}", current_funds.credits);
         let funds_input = UserInput::get_user_input();
-        current_funds.add_funds(&funds_input, &mut state);
+        current_funds.chk_funds_input(&funds_input, &mut state);
 
         while state == MachineState::CoinsAvailable {
             current_funds.reduce_funds();
@@ -51,6 +51,7 @@ fn main() {
             holder = format_hand(&five_card_hand);
             print_hand(&holder);
             let evaluation = evaluate_hand(&five_card_hand);
+
             evaluation.print_evaluation(&mut current_funds);
             while state == MachineState::Double {}
 
