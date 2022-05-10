@@ -78,9 +78,9 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
 
 pub fn print_hand(vec_of_charholder: &Vec<CharHolder>) {
     for row in 0..11 {
-        for card in 0..5 {
+        for card in vec_of_charholder {
             for char in (row * 16)..(row * 16) + 16 {
-                print!("{}", vec_of_charholder[card].holder[char]);
+                print!("{}", card.holder[char]);
             }
         }
         println!("");
