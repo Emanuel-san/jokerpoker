@@ -1,9 +1,8 @@
-use clearscreen::ClearScreen;
-
 use crate::card::*;
 use crate::hand::*;
 use crate::input::*;
 use crate::utils::*;
+use clearscreen::ClearScreen;
 
 pub struct Funds {
     pub credits: usize,
@@ -89,34 +88,6 @@ impl Funds {
             } else {
                 println!("Invalid input");
             }
-        }
-    }
-}
-
-pub fn card_selection(
-    input: &UserInput,
-    hand: &mut Hand,
-    holder: &mut Vec<CharHolder>,
-    state: &mut MachineState,
-    funds: &Funds,
-) {
-    if let Ok(()) = input.chk_draw_input() {
-        ClearScreen::default()
-            .clear()
-            .expect("failed to clear terminal");
-        *state = MachineState::CoinsAvailable;
-    } else {
-        if let Ok(parsed_input) = input.chk_select_input() {
-            ClearScreen::default()
-                .clear()
-                .expect("failed to clear terminal");
-            let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
-            card.alter_selection();
-            *holder = format_hand(&hand);
-            println!("Funds: {}", funds.credits);
-            print_hand(&holder);
-        } else {
-            println!("Invalid input");
         }
     }
 }
