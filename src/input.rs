@@ -45,6 +45,22 @@ impl UserInput {
         }
     }
 
+    pub fn chk_double_input(&self) -> Result<(), ()> {
+        if self.input_string.trim().to_lowercase() == "double" {
+            Ok(())
+        } else {
+            Err(())
+        }
+    }
+
+    pub fn chk_withdraw_input(&self) -> Result<(), ()> {
+        if self.input_string.trim().to_lowercase() == "withdraw" {
+            Ok(())
+        } else {
+            Err(())
+        }
+    }
+
     pub fn chk_parsed_funds_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
             if input == 1 || input == 2 || input == 5 || input == 10 {
