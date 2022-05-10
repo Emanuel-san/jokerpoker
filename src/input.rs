@@ -10,7 +10,7 @@ impl UserInput {
         let mut string_input = String::new();
         io::stdin()
             .read_line(&mut string_input)
-            .expect("input::discard_hand_index, Failed to read line");
+            .expect("UserInput::, Failed to read line");
 
         Self {
             input_string: string_input,
