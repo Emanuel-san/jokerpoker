@@ -91,8 +91,7 @@ impl UserInput {
                 let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
                 card.alter_selection();
                 *holder = format_hand(&hand);
-                println!("Funds: {}", funds.credits);
-                print_hand(&holder);
+                print_hand_and_credits(&holder, &funds);
             } else {
                 println!("Invalid input");
             }
