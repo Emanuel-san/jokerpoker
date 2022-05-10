@@ -125,8 +125,10 @@ impl UserInput {
     pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, evaluation: &Evaluation) {
         if let Ok(()) = self.chk_draw_input() {
             funds.add_funds(evaluation.hand_value);
+            *state = MachineState::CoinsAvailable;
         } else if let Ok(()) = self.chk_withdraw_input() {
             funds.credits = 0;
+            *state = MachineState::InsertCoin;
         } else if self.input_string.trim().to_lowercase() == "double" && *state == MachineState::Win
         {
             *state = MachineState::Double;
