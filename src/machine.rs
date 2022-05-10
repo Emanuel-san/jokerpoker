@@ -30,10 +30,10 @@ impl Evaluation {
         }
     }
 
-    pub fn print_and_add_win(&self, funds: &mut Funds) {
+    pub fn print_evaluation(&self, funds: &mut Funds) {
         if self.hand_value > 0 {
             println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
-            funds.credits += self.hand_value;
+            //funds.credits += self.hand_value;
         }
     }
 }

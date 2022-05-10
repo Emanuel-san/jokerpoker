@@ -51,7 +51,8 @@ fn main() {
             holder = format_hand(&five_card_hand);
             print_hand(&holder);
             let evaluation = evaluate_hand(&five_card_hand);
-            evaluation.print_and_add_win(&mut current_funds);
+            evaluation.print_evaluation(&mut current_funds);
+
             current_funds.chk_funds(&mut state);
         }
     }
