@@ -19,6 +19,26 @@ Accepted values of funds: 1, 2, 5 and 10.
     )
 }
 
+fn add_face_down(vec_holder: &mut Vec<CharHolder>) {
+    let mut char_holder = CharHolder::new();
+    let mut face_down_card = String::from("
+┌──────────────┐
+|'************'|
+|''**********''|
+|'''********'''|
+|''''******''''|
+|'''''****'''''|
+|''''******''''|
+|'''********'''|
+|''**********''|
+|'************'|
+└──────────────┘
+    ");
+    face_down_card = face_down_card.replace("\n", "");
+    char_holder.format_string_to_chars(&face_down_card);
+    vec_holder.push(char_holder);
+}
+
 pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
     let mut vec_holder: Vec<CharHolder> = Vec::new();
     for card in &hand.hand_vec {
@@ -72,6 +92,9 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
 
             vec_holder.push(char_holder);
         }
+    }
+    while vec_holder.len() < 5 {
+        add_face_down(&mut vec_holder);
     }
     vec_holder
 }
