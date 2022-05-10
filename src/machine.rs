@@ -8,7 +8,7 @@ pub struct Funds {
 }
 
 pub struct Evaluation {
-    hand_value: usize,
+    pub hand_value: usize,
     hand_type: String,
     pub win_state: Won,
 }
