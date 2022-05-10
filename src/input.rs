@@ -51,14 +51,6 @@ impl UserInput {
         }
     }
 
-    pub fn chk_double_input(&self) -> Result<(), ()> {
-        if self.input_string.trim().to_lowercase() == "double" {
-            Ok(())
-        } else {
-            Err(())
-        }
-    }
-
     pub fn chk_withdraw_input(&self) -> Result<(), ()> {
         if self.input_string.trim().to_lowercase() == "withdraw" {
             Ok(())
@@ -127,6 +119,18 @@ impl UserInput {
             } else {
                 println!("Invalid input");
             }
+        }
+    }
+
+    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, evaluation: &Evaluation) {
+        if let Ok(()) = self.chk_draw_input() {
+            funds.add_funds(evaluation.hand_value);
+        } else if let Ok(()) = self.chk_withdraw_input() {
+            *state = MachineState::InsertCoin;
+            funds.credits = 0;
+        } else if self.input_string.trim().to_lowercase() == "double"
+            && evaluation.win_state == Won::Win
+        {
         }
     }
 }
