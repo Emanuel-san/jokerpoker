@@ -20,6 +20,7 @@ pub enum MachineState {
     CardSelection,
     InsertCoin,
     Double,
+    Won,
 }
 
 impl Evaluation {
