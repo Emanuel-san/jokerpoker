@@ -12,6 +12,11 @@ pub struct Funds {
 pub struct Evaluation {
     hand_value: usize,
     hand_type: String,
+    win_state: Won,
+}
+pub enum Won {
+    Win,
+    NoWin,
 }
 
 #[derive(PartialEq)]
@@ -20,18 +25,18 @@ pub enum MachineState {
     CardSelection,
     InsertCoin,
     Double,
-    Won,
 }
 
 impl Evaluation {
-    pub fn new(hand_value: usize, hand_type: String) -> Self {
+    pub fn new(hand_value: usize, hand_type: String, win_state: Won) -> Self {
         Self {
             hand_value,
             hand_type,
+            win_state,
         }
     }
 
-    pub fn print_evaluation(&self, funds: &mut Funds) {
+    pub fn print_evaluation(&self /*funds: &mut Funds*/) {
         if self.hand_value > 0 {
             println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
             //funds.credits += self.hand_value;
@@ -200,22 +205,22 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         values_filtered[0].1,
         values_filtered[1].1,
     ) {
-        (_, _, 5, _) => Evaluation::new(100, String::from("Five Of A Kind")),
+        (_, _, 5, _) => Evaluation::new(100, String::from("Five Of A Kind"), Won::Win),
         (true, true, _, _) => {
             if pointer == 8 {
-                Evaluation::new(250, String::from("Royal Flush"))
+                Evaluation::new(250, String::from("Royal Flush"), Won::Win)
             } else {
-                Evaluation::new(50, String::from("Straight Flush")) // if a joker was used then its only a straight flush
+                Evaluation::new(50, String::from("Straight Flush"), Won::Win) // if a joker was used then its only a straight flush
             }
         }
-        (_, _, 4, _) => Evaluation::new(25, String::from("Four Of A Kind")),
-        (_, _, 3, 2) => Evaluation::new(9, String::from("Full House")),
-        (true, _, _, _) => Evaluation::new(6, String::from("Flush")),
-        (_, true, _, _) => Evaluation::new(4, String::from("Straight")),
-        (_, _, 3, _) => Evaluation::new(3, String::from("Three Of A Kind")),
-        (_, _, 2, 2) => Evaluation::new(2, String::from("Two Pair")),
-        (_, _, 2, _) => Evaluation::new(1, String::from("Jacks Or Better")),
-        _ => Evaluation::new(0, String::from("High Card")),
+        (_, _, 4, _) => Evaluation::new(25, String::from("Four Of A Kind"), Won::Win),
+        (_, _, 3, 2) => Evaluation::new(9, String::from("Full House"), Won::Win),
+        (true, _, _, _) => Evaluation::new(6, String::from("Flush"), Won::Win),
+        (_, true, _, _) => Evaluation::new(4, String::from("Straight"), Won::Win),
+        (_, _, 3, _) => Evaluation::new(3, String::from("Three Of A Kind"), Won::Win),
+        (_, _, 2, 2) => Evaluation::new(2, String::from("Two Pair"), Won::Win),
+        (_, _, 2, _) => Evaluation::new(1, String::from("Jacks Or Better"), Won::Win),
+        _ => Evaluation::new(0, String::from("High Card"), Won::NoWin),
     };
     new_evaluation
 }

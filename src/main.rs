@@ -52,7 +52,8 @@ fn main() {
             print_hand(&holder);
             let evaluation = evaluate_hand(&five_card_hand);
 
-            evaluation.print_evaluation(&mut current_funds);
+            evaluation.print_evaluation();
+            
             while state == MachineState::Double {}
 
             current_funds.chk_funds(&mut state);
