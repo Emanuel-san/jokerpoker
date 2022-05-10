@@ -1,29 +1,26 @@
-
 mod card;
-mod hand;
 mod deck;
-mod utils;
-mod machine;
+mod hand;
 mod input;
+mod machine;
+mod utils;
 
 use crate::input::*;
 use crate::utils::*;
 use clearscreen::ClearScreen;
-use machine::*;
-use hand::*;
 use deck::*;
-
-
-
-
+use hand::*;
+use machine::*;
 
 fn main() {
-    ClearScreen::default().clear().expect("failed to clear terminal");
+    ClearScreen::default()
+        .clear()
+        .expect("failed to clear terminal");
     let mut current_funds = Funds::new();
     let mut state = MachineState::InsertCoin;
     print_insert_coin();
 
-    while state == MachineState::InsertCoin{
+    while state == MachineState::InsertCoin {
         println!("CREDITS: {}", current_funds.credits);
         let funds_input = UserInput::get_user_input();
         current_funds.add_funds(&funds_input, &mut state);
@@ -37,10 +34,16 @@ fn main() {
             println!("CREDITS: {}", current_funds.credits);
             print_hand(&holder);
             state = MachineState::CardSelection;
-            
+
             while state == MachineState::CardSelection {
                 let select_input = UserInput::get_user_input();
-                card_selection(&select_input, &mut five_card_hand, &mut holder, &mut state, &current_funds);
+                card_selection(
+                    &select_input,
+                    &mut five_card_hand,
+                    &mut holder,
+                    &mut state,
+                    &current_funds,
+                );
             }
 
             five_card_hand.discard_selected();
