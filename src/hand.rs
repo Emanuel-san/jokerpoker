@@ -45,4 +45,12 @@ impl Hand {
             self.hand_vec.remove(index);
         }
     }
+
+    pub fn test_hand(&mut self){
+        self.hand_vec.push(Card::get_card(13, 1));
+        self.hand_vec.push(Card::get_card(13, 2));
+        self.hand_vec.push(Card::get_card(1, 2));
+        self.hand_vec.push(Card::get_card(4, 3));
+        self.hand_vec.push(Card::get_card(9, 4));
+    }
 }
