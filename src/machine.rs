@@ -88,7 +88,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         }
     }
 
-    value_tracker[0] = value_tracker[13]; //We need to add aces to the highest value count aswell since we only count them as lowest value when counting in previous for loop.
+    value_tracker[0] = value_tracker[13]; //We need to add aces to the lowest value count aswell
 
     //filter out the suit_tracker where 0 values occur and collect the none zero values into a new vec (counted_suits)...
     let mut counted_suits = suit_tracker
@@ -100,41 +100,40 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
     let is_flush = counted_suits[0] == 5; // If index 0 contains element 5 then we have a flush.
     let mut is_straight = false;
 
-    let mut pointer = 14;
     //We use a "pointer" to avoid looking at cards again that was a part of another sequence.
     //This is only for checking if we have a poker hand with a straight.
-
-    while pointer > 3 {
-        // If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight.
-        let mut jokers_left = jokers; //Each time a sequence "fails" we re-declare jokers to use in the next sequence
-        let mut straight_cards = 0; // Reset to 0 on "failed" sequence.
+    let mut pointer = 14;
+    while pointer > 3 {                      // If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight.
+        let mut jokers_left = jokers;    // Each time a sequence "fails" we re-declare jokers to use in the next sequence
+        let mut straight_cards = 0;     // Reset to 0 on "failed" sequence.
         for i in (0..pointer).rev() { // loop through pointer in reverse 13..0
-            if value_tracker[i] == 0 { // if element at index is 0...
-                if jokers_left == 0 { // ...then we check if we have jokers left to use.
-                    break; // If not then we break out.
+            if value_tracker[i] == 0 {       // if element at index is 0...
+                if jokers_left == 0 {        // ...then we check if we have jokers left to use.
+                    break;                   // If not then we break out.
                 }
-                jokers_left -= 1; //Remove joker if used
-            } else if i == pointer - 1 { //Since we use jokers we will only reduce pointer if this is true, else its possible we miss a possible straight in the next sequence
+                jokers_left -= 1;            //Remove joker if used
+            } else if i == pointer - 1 {     //Since we use jokers we will only reduce pointer if this is true, else its possible we miss a possible straight in the next sequence
                 pointer -= 1;
             }
-            straight_cards += 1; //if we found a index with a none zero value or we used a joker, add 1 straight card.
+            straight_cards += 1;             //if we found a index with a none zero value or we used a joker, add 1 straight card.
         }
-        pointer -= 1; //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
+        pointer -= 1;                        //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
         if straight_cards == 5 {
-            is_straight = true; // We have a straight!
+            is_straight = true;              // We have a straight!
             break;
         }
     }
-
+    value_tracker[0] = 0; // if we had aces we need to reset lowest index to zero again.
     //filter out values that are 0
     // iterate over the vector, enumerate (index, value), but only iterate over 14 first indexes (else we enumarete jokers also)
     // filter out any enumeration that had a value of 0 and collect them into a vector.
     let mut values_filtered = value_tracker
         .into_iter()
         .enumerate()
-        .take(13)
+        .take(14)
         .filter(|&x| x.1 > 0)
         .collect::<Vec<_>>();
+        //println!("Debug filtered values: {:?}", values_filtered);
     //sort by quantity first, then by value
     values_filtered.sort_unstable_by(|a, b| {
         if b.1 == a.1 {
@@ -171,7 +170,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         (_, _, 3, _) => Evaluation::new(3, String::from("Three Of A Kind")),
         (_, _, 2, 2) => Evaluation::new(2, String::from("Two Pair")),
         (_, _, 2, _) => {
-            if values_filtered[0].0 == 0 || values_filtered[0].0 >= 10 {
+            if values_filtered[0].0 >= 10 {
                 Evaluation::new(1, String::from("Jacks Or Better"))
             } else {
                 Evaluation::new(0, String::from(""))
