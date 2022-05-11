@@ -56,8 +56,19 @@ impl Funds {
         self.credits -= 1;
     }
 
-    pub fn add_funds(&mut self, funds_to_add: usize) {
+    pub fn add_funds(&mut self, funds_to_add: &usize) {
         self.credits += funds_to_add;
+    }
+}
+
+pub fn evaluate_doubling(hand: &Hand, credits_won: &mut usize, selected_index: &usize, state: &mut MachineState,){
+    if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{
+        *credits_won *= 2;
+        println!("You won, winnings are now {}", credits_won);
+        *state = MachineState::Win;
+    } else {
+        println!("BUST!");
+        *state = MachineState::CoinsAvailable;
     }
 }
 
@@ -77,7 +88,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         }
     }
 
-    value_tracker[13] = value_tracker[0]; //We need to add aces to the highest value count aswell since we only count them as lowest value when counting in previous for loop.
+    value_tracker[0] = value_tracker[13]; //We need to add aces to the highest value count aswell since we only count them as lowest value when counting in previous for loop.
 
     //filter out the suit_tracker where 0 values occur and collect the none zero values into a new vec (counted_suits)...
     let mut counted_suits = suit_tracker
@@ -97,7 +108,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         // If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight.
         let mut jokers_left = jokers; //Each time a sequence "fails" we re-declare jokers to use in the next sequence
         let mut straight_cards = 0; // Reset to 0 on "failed" sequence.
-        for i in (0..pointer).rev() { // loop through pointer in reverse
+        for i in (0..pointer).rev() { // loop through pointer in reverse 13..0
             if value_tracker[i] == 0 { // if element at index is 0...
                 if jokers_left == 0 { // ...then we check if we have jokers left to use.
                     break; // If not then we break out.
