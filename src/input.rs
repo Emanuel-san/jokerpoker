@@ -11,6 +11,11 @@ pub struct UserInput {
     pub input_string: String,
 }
 
+enum Control {
+    Accepted,
+    Rejected
+}
+
 impl UserInput {
     pub fn get_user_input() -> Self {
         let mut input_string = String::new();
@@ -70,6 +75,17 @@ impl UserInput {
             Err(())
         }
     }
+    fn chk_parsed_double_input(&self) -> Result<usize, ()> {
+        if let Ok(input) = self.parse_input() {
+            if input <= 5 && input >= 2 {
+                Ok(input)
+            } else {
+                Err(())
+            }
+        } else {
+            Err(())
+        }
+    }
 
     pub fn card_selection(
         &self,
@@ -77,7 +93,7 @@ impl UserInput {
         holder: &mut Vec<CharHolder>,
         state: &mut MachineState,
         funds: &Funds,
-    ) {
+        ) {
         if let Ok(()) = self.chk_draw_input() {
             ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::CoinsAvailable;
@@ -92,6 +108,9 @@ impl UserInput {
                 println!("Invalid input");
             }
         }
+    }
+    pub fn double_input(&self, winning_credits: usize){
+        if let Ok(()) = self.chk_parsed_double_input()
     }
 
     pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
