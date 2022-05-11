@@ -13,9 +13,9 @@ pub struct UserInput {
 }
 
 #[derive(PartialEq)]
-pub enum Control {
-    Accepted,
-    Rejected
+pub enum InputControl {
+    Valid,
+    Invalid
 }
 
 impl UserInput {
@@ -111,11 +111,11 @@ impl UserInput {
             }
         }
     }
-    pub fn double_input(&self, input_control: &mut Control) -> usize{
+    pub fn double_input(&self, input_control: &mut InputControl) -> usize{
 
         if let Ok(parsed_input) = self.chk_parsed_double_input(){
-            *input_control = Control::Accepted;
-            parsed_input
+            *input_control = InputControl::Valid;
+            parsed_input - 1
         } else {
             println!("Invalid input");
             0
