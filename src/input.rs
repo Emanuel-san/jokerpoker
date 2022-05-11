@@ -141,9 +141,9 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, amount_won: &usize) {
+    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, credits_won: &usize) {
         if let Ok(()) = self.chk_draw_input() {
-            funds.add_funds(amount_won);
+            funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
         } 
         else if let Ok(()) = self.chk_withdraw_input() {
