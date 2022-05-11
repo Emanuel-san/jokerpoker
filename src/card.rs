@@ -19,7 +19,6 @@ fn convert_bytes_to_integer(bytes: &[u8]) -> u8 {
 }
 
 impl Card {
-    ///constructor
     fn new() -> Self {
         Self {
             value: 0,
@@ -53,9 +52,7 @@ impl Card {
             0 => face = vec![65, 32],
             number => {
                 face = vec![
-                    convert_bytes_to_integer((number + 1).to_string().as_bytes()),
-                    32,
-                ]
+                    convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,]
             }
         }
         face

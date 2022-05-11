@@ -97,25 +97,20 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         // If the pointer reachs value 3 its no point at looking at the rest since Ace-2-3-4 will not make a straight.
         let mut jokers_left = jokers; //Each time a sequence "fails" we re-declare jokers to use in the next sequence
         let mut straight_cards = 0; // Reset to 0 on "failed" sequence.
-        for i in (0..pointer).rev() {
-            // represents the sequence (0..ptr) = 0-13
-            if value_tracker[i] == 0 {
-                // if element at index is 0...
-                if jokers_left == 0 {
-                    // ...then we check if we have jokers left to use.
+        for i in (0..pointer).rev() { // loop through pointer in reverse
+            if value_tracker[i] == 0 { // if element at index is 0...
+                if jokers_left == 0 { // ...then we check if we have jokers left to use.
                     break; // If not then we break out.
                 }
                 jokers_left -= 1; //Remove joker if used
-            } else if i == pointer - 1 {
-                //Since we use jokers we will only reduce pointer if this is true, else its possible we miss a possible straight in the next sequence
+            } else if i == pointer - 1 { //Since we use jokers we will only reduce pointer if this is true, else its possible we miss a possible straight in the next sequence
                 pointer -= 1;
             }
             straight_cards += 1; //if we found a index with a none zero value or we used a joker, add 1 straight card.
         }
         pointer -= 1; //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
         if straight_cards == 5 {
-            // We have a straight!
-            is_straight = true;
+            is_straight = true; // We have a straight!
             break;
         }
     }

@@ -24,15 +24,15 @@ fn add_face_down(vec_holder: &mut Vec<CharHolder>) {
     let mut char_holder = CharHolder::new();
     let mut face_down_card = String::from("
 ┌──────────────┐
-|█ █ █ █ █ █ █ |
-| █ █ █ █ █ █ █|
-|█ █ █ █ █ █ █ |
-| █ █ █ █ █ █ █|
-|█ █ █ █ █ █ █ |
-| █ █ █ █ █ █ █|
-|█ █ █ █ █ █ █ |
-| █ █ █ █ █ █ █|
-|█ █ █ █ █ █ █ |
+|**************|
+|*█ █ █ █ █ █ *|
+|* █ █ █ █ █ █*|
+|*█ █ █ █ █ █ *|
+|* █ █ █ █ █ █*|
+|*█ █ █ █ █ █ *|
+|* █ █ █ █ █ █*|
+|*█ █ █ █ █ █ *|
+|**************|
 └──────────────┘
     ");
     face_down_card = face_down_card.replace("\n", "");
@@ -47,8 +47,7 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
         let face = card.get_face_bytes();
         let suit = card.get_suit_bytes();
         if card.selected == true {
-            let mut formated_card = format!(
-                "
+            let mut formated_card = format!("
 ┌──────────────┐
 |{}            |
 |   SELECTED   |
@@ -70,8 +69,7 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
 
             vec_holder.push(char_holder);
         } else {
-            let mut formated_card = format!(
-                "
+            let mut formated_card = format!("
 ┌──────────────┐
 |{}            |
 |              |

@@ -13,13 +13,13 @@ pub struct UserInput {
 
 impl UserInput {
     pub fn get_user_input() -> Self {
-        let mut string_input = String::new();
+        let mut input_string = String::new();
         io::stdin()
-            .read_line(&mut string_input)
+            .read_line(&mut input_string)
             .expect("UserInput::, Failed to read line");
 
-        Self {
-            input_string: string_input,
+        UserInput {
+            input_string,
         }
     }
 
@@ -79,15 +79,11 @@ impl UserInput {
         funds: &Funds,
     ) {
         if let Ok(()) = self.chk_draw_input() {
-            ClearScreen::default()
-                .clear()
-                .expect("failed to clear terminal");
+            ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::CoinsAvailable;
         } else {
             if let Ok(parsed_input) = self.chk_select_input() {
-                ClearScreen::default()
-                    .clear()
-                    .expect("failed to clear terminal");
+                ClearScreen::default().clear().expect("failed to clear terminal");
                 let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
                 card.alter_selection();
                 *holder = format_hand(&hand);
@@ -101,18 +97,14 @@ impl UserInput {
     pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
         if let Ok(()) = self.chk_draw_input() {
             if funds.credits > 0 {
-                ClearScreen::default()
-                    .clear()
-                    .expect("failed to clear terminal");
+                ClearScreen::default().clear().expect("failed to clear terminal");
                 *state = MachineState::CoinsAvailable;
             } else {
                 println!("No available funds");
             }
         } else {
             if let Ok(input) = self.chk_parsed_funds_input() {
-                ClearScreen::default()
-                    .clear()
-                    .expect("failed to clear terminal");
+                ClearScreen::default().clear().expect("failed to clear terminal");
                 funds.add_funds(input);
                 print_insert_coin();
             } else {
@@ -125,13 +117,15 @@ impl UserInput {
         if let Ok(()) = self.chk_draw_input() {
             funds.add_funds(evaluation.hand_value);
             *state = MachineState::CoinsAvailable;
-        } else if let Ok(()) = self.chk_withdraw_input() {
+        } 
+        else if let Ok(()) = self.chk_withdraw_input() {
             funds.credits = 0;
             *state = MachineState::InsertCoin;
-        } else if self.input_string.trim().to_lowercase() == "double" && *state == MachineState::Win
-        {
+        } 
+        else if self.input_string.trim().to_lowercase() == "double" && *state == MachineState::Win{
             *state = MachineState::Double;
-        } else {
+        } 
+        else {
             println!("Invalid input");
         }
     }

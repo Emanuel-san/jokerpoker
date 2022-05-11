@@ -22,8 +22,8 @@ fn main() {
 
     while state == MachineState::InsertCoin {
         println!("CREDITS: {}", current_funds.credits);
-        let player_credits_input = UserInput::get_user_input();
-        player_credits_input.funds_input(&mut current_funds, &mut state);
+        let mut player_input = UserInput::get_user_input();
+        player_input.funds_input(&mut current_funds, &mut state);
 
         while state == MachineState::CoinsAvailable {
             current_funds.reduce_funds();
@@ -36,8 +36,8 @@ fn main() {
             state = MachineState::CardSelection;
 
             while state == MachineState::CardSelection {
-                let select_input = UserInput::get_user_input();
-                select_input.card_selection(
+                player_input = UserInput::get_user_input();
+                player_input.card_selection(
                     &mut five_card_hand,
                     &mut holder,
                     &mut state,
@@ -50,20 +50,23 @@ fn main() {
             holder = format_hand(&five_card_hand);
             print_hand_and_credits(&holder, &current_funds);
             let evaluation = evaluate_hand(&five_card_hand);
-
             evaluation.chk_evaluation_for_win(&mut state);
+
             while state == MachineState::Win {
-                println!(
-                    r#"Would you like to "double" your winnings, "draw" new hand or "withdraw" your credits?"#
-                );
-                let player_choice_input = UserInput::get_user_input();
-                player_choice_input.win_input(&mut current_funds, &mut state, &evaluation);
+                let mut amount_won = evaluation.hand_value;
+                println!(r#"Would you like to "double" your winnings, "draw" new hand or "withdraw" your credits?"#);
+                player_input = UserInput::get_user_input();
+                player_input.win_input(&mut current_funds, &mut state, &evaluation);
+
                 while state == MachineState::Double {
                     let mut doubling_deck = Deck::get_deck();
                     let mut doubling_hand = Hand::new();
                     doubling_hand.draw_card(&mut doubling_deck);
                     holder = format_hand(&doubling_hand);
                     print_hand_and_credits(&holder, &current_funds);
+                    println!("  DEALERS CARD\n");
+                    player_input = UserInput::get_user_input();
+                    
 
                     state = MachineState::CoinsAvailable;
                 }
