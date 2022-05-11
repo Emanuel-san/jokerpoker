@@ -5,13 +5,15 @@ use crate::card::*;
 use crate::hand::*;
 use crate::machine::*;
 use crate::utils::*;
+//use crate::deck::*;
 
 #[derive(PartialEq)]
 pub struct UserInput {
     pub input_string: String,
 }
 
-enum Control {
+#[derive(PartialEq)]
+pub enum Control {
     Accepted,
     Rejected
 }
@@ -109,8 +111,15 @@ impl UserInput {
             }
         }
     }
-    pub fn double_input(&self, winning_credits: usize){
-        if let Ok(()) = self.chk_parsed_double_input()
+    pub fn double_input(&self, input_control: &mut Control) -> usize{
+
+        if let Ok(parsed_input) = self.chk_parsed_double_input(){
+            *input_control = Control::Accepted;
+            parsed_input
+        } else {
+            println!("Invalid input");
+            0
+        }
     }
 
     pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
@@ -124,7 +133,7 @@ impl UserInput {
         } else {
             if let Ok(input) = self.chk_parsed_funds_input() {
                 ClearScreen::default().clear().expect("failed to clear terminal");
-                funds.add_funds(input);
+                funds.add_funds(&input);
                 print_insert_coin();
             } else {
                 println!("Invalid input");
@@ -132,9 +141,9 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, evaluation: &Evaluation) {
+    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, amount_won: &usize) {
         if let Ok(()) = self.chk_draw_input() {
-            funds.add_funds(evaluation.hand_value);
+            funds.add_funds(amount_won);
             *state = MachineState::CoinsAvailable;
         } 
         else if let Ok(()) = self.chk_withdraw_input() {
