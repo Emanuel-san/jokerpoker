@@ -21,7 +21,7 @@ impl Deck {
         let mut deck_init = Deck::new();
         for suit in 1..=4 {
             //Generate 4 suits
-            for card_face in 0..=12 {
+            for card_face in 1..=13 {
                 //13 card faces for each suit (Ace-King)
                 deck_init.deck_vec.push(Card::get_card(card_face, suit));
             }

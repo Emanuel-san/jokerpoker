@@ -49,7 +49,7 @@ impl Card {
             11 => face = vec![81, 32],
             10 => face = vec![74, 32],
             9 => face = vec![49, 48],
-            0 => face = vec![65, 32],
+            13 => face = vec![65, 32],
             number => {
                 face = vec![
                     convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,]
