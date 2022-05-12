@@ -68,7 +68,7 @@ pub fn evaluate_doubling(
     {
     if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{
         *credits_won *= 2;
-        println!("You won, winnings are now {}", credits_won);
+        println!("You beat the dealer! Credits won are now {}", credits_won);
         *state = MachineState::Win;
     } else {
         println!("BUST!");
