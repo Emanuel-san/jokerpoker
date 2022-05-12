@@ -27,7 +27,7 @@ impl Hand {
     pub fn draw_card(&mut self, deck_of_cards: &mut Deck) {
         match deck_of_cards.deck_vec.pop() {
             Some(card) => self.hand_vec.push(card),
-            None => panic!("Deck::draw_card_from_deck: Received a None option"),
+            None => panic!("Deck::draw_card_from_deck: deck wasn't popped"),
         }
     }
 
@@ -46,7 +46,7 @@ impl Hand {
         }
     }
 
-    pub fn test_hand(&mut self){
+    pub fn _test_hand(&mut self){
         self.hand_vec.push(Card::get_card(13, 1));
         self.hand_vec.push(Card::get_card(13, 2));
         self.hand_vec.push(Card::get_card(1, 2));
