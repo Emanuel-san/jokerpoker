@@ -1,5 +1,6 @@
 #Ignore target folder
 /target
+/.vscode
 
 #Ignore cargo binaries
 *.lock
