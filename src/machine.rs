@@ -1,7 +1,7 @@
 use crate::card::*;
 use crate::hand::*;
+use crate::input::InputControl;
 use crate::utils::*;
-use clearscreen::ClearScreen;
 
 pub struct Funds {
     pub credits: usize,
@@ -45,9 +45,7 @@ impl Funds {
     }
     pub fn chk_funds(&mut self, state: &mut MachineState) {
         if self.credits == 0 {
-            ClearScreen::default()
-                .clear()
-                .expect("failed to clear terminal");
+            //ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::InsertCoin;
             print_insert_coin();
         }
@@ -61,7 +59,13 @@ impl Funds {
     }
 }
 
-pub fn evaluate_doubling(hand: &Hand, credits_won: &mut usize, selected_index: &usize, state: &mut MachineState,){
+pub fn evaluate_doubling(
+    hand: &Hand, 
+    credits_won: &mut usize, 
+    selected_index: &usize, 
+    state: &mut MachineState,
+    input_control: &mut InputControl,)
+    {
     if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{
         *credits_won *= 2;
         println!("You won, winnings are now {}", credits_won);
@@ -69,6 +73,7 @@ pub fn evaluate_doubling(hand: &Hand, credits_won: &mut usize, selected_index: &
     } else {
         println!("BUST!");
         *state = MachineState::CoinsAvailable;
+        *input_control = InputControl::Invalid;
     }
 }
 
@@ -123,7 +128,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
             break;
         }
     }
-    value_tracker[0] = 0; // if we had aces we need to reset lowest index to zero again.
+    value_tracker[0] = 0; // reset lowest index to 0 to not count aces twice
     //filter out values that are 0
     // iterate over the vector, enumerate (index, value), but only iterate over 14 first indexes (else we enumarete jokers also)
     // filter out any enumeration that had a value of 0 and collect them into a vector.
