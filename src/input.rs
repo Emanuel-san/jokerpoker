@@ -79,7 +79,7 @@ impl UserInput {
     }
     fn chk_parsed_double_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
-            if input <= 5 && input >= 2 {
+            if input <= 4 && input >= 1 {
                 Ok(input)
             } else {
                 Err(())
@@ -106,7 +106,6 @@ impl UserInput {
                 card.alter_selection();
                 *holder = format_hand(&hand);
                 print_hand_and_credits(&holder, &funds);
-                println!(r#"Select and de-select cards by entering the card position(1-5) and "draw" to change unselected cards"#);
             } else {
                 println!("Invalid input");
             }
@@ -116,7 +115,7 @@ impl UserInput {
 
         if let Ok(parsed_input) = self.chk_parsed_double_input(){
             *input_control = InputControl::Valid;
-            parsed_input - 1
+            parsed_input
         } else {
             println!("Invalid input");
             0
@@ -153,6 +152,7 @@ impl UserInput {
         } 
         else if self.input_string.trim().to_lowercase() == "double"{
             *state = MachineState::Double;
+            *control = InputControl::Invalid;
         } 
         else {
             println!("Invalid input");
