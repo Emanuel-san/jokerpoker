@@ -106,6 +106,7 @@ impl UserInput {
                 card.alter_selection();
                 *holder = format_hand(&hand);
                 print_hand_and_credits(&holder, &funds);
+                println!(r#"Select and de-select cards by entering the card position(1-5) and "draw" to change unselected cards"#);
             } else {
                 println!("Invalid input");
             }
@@ -125,7 +126,6 @@ impl UserInput {
     pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
         if let Ok(()) = self.chk_draw_input() {
             if funds.credits > 0 {
-                ClearScreen::default().clear().expect("failed to clear terminal");
                 *state = MachineState::CoinsAvailable;
             } else {
                 println!("No available funds");
@@ -141,19 +141,36 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, credits_won: &usize) {
+    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, credits_won: &usize, control: &mut InputControl) {
         if let Ok(()) = self.chk_draw_input() {
             funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
+            *control = InputControl::Valid;
         } 
         else if let Ok(()) = self.chk_withdraw_input() {
             funds.credits = 0;
             *state = MachineState::InsertCoin;
         } 
-        else if self.input_string.trim().to_lowercase() == "double" && *state == MachineState::Win{
+        else if self.input_string.trim().to_lowercase() == "double"{
             *state = MachineState::Double;
         } 
         else {
+            println!("Invalid input");
+        }
+    }
+
+    pub fn end_input(&self, funds: &mut Funds, control: &mut InputControl, state: &mut MachineState,){
+        if let Ok(()) = self.chk_draw_input(){
+            ClearScreen::default().clear().expect("failed to clear terminal");
+            *control = InputControl::Valid;
+        }
+        else if let Ok(()) = self.chk_withdraw_input(){
+            funds.credits = 0;
+            *control = InputControl::Valid;
+            *state = MachineState::InsertCoin;
+            print_insert_coin();
+        }
+        else{
             println!("Invalid input");
         }
     }
