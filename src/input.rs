@@ -5,7 +5,6 @@ use crate::card::*;
 use crate::hand::*;
 use crate::machine::*;
 use crate::utils::*;
-//use crate::deck::*;
 
 #[derive(PartialEq)]
 pub struct UserInput {
