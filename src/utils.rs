@@ -8,16 +8,14 @@ pub struct CharHolder {
 }
 
 pub fn print_insert_coin() {
-    println!(
-        "
+    println!("
 ██ ███    ██ ███████ ███████ ██████  ████████      ██████  ██████  ██ ███    ██ 
 ██ ████   ██ ██      ██      ██   ██    ██        ██      ██    ██ ██ ████   ██ 
 ██ ██ ██  ██ ███████ █████   ██████     ██        ██      ██    ██ ██ ██ ██  ██ 
 ██ ██  ██ ██      ██ ██      ██   ██    ██        ██      ██    ██ ██ ██  ██ ██ 
 ██ ██   ████ ███████ ███████ ██   ██    ██         ██████  ██████  ██ ██   ████
 Accepted values of funds: 1, 2, 5 and 10.
-"
-    )
+    ")
 }
 
 fn add_face_down(vec_holder: &mut Vec<CharHolder>) {
@@ -107,6 +105,16 @@ pub fn print_hand_and_credits(vec_of_charholder: &Vec<CharHolder>, current_funds
             }
         }
         println!("");
+    }
+}
+
+pub fn print_tips(state: &MachineState){
+    match *state {
+        MachineState::CoinsAvailable => println!(r#"Type "draw" to continue playing or "withdraw" to cash out."#),
+        MachineState::CardSelection => println!(r#"Select and de-select cards by entering the card position(1-5) and "draw" to change unselected cards."#),
+        MachineState::Win => println!(r#"Would you like to "double" your winnings, "draw" new hand or "withdraw" your credits?"#),
+        MachineState::Double => println!(r#"Beat the dealers card by choosing one of the face down cards (1-4) that is higher or equal."#),
+        _ => ()
     }
 }
 
