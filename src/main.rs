@@ -69,7 +69,7 @@ fn main() {
                     while selected_index == None{
                         print_tips(&state);
                         player_input = UserInput::get_user_input();
-                        selected_index = player_input.double_input();
+                        selected_index = player_input.chk_parsed_double_input();
                     }
                     five_card_hand.draw_until_five_cards(&mut doubling_deck);
                     five_card_hand.hand_vec[selected_index.unwrap()].alter_selection();

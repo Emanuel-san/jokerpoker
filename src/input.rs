@@ -62,17 +62,19 @@ impl UserInput {
     }
 
     ///Check if the parsed input is within the allowed span of 1-4 (Selecting card 1-4)
-    fn chk_parsed_double_input(&self) -> Result<usize, ()> {
+    pub fn chk_parsed_double_input(&self) -> Option<usize> {
         if let Ok(input) = self.parse_input() {
             if input <= 4 && input >= 1 {
-                Ok(input)
+                Some(input)
             } 
             else {
-                Err(())
+                println!("Invalid input");
+                None
             }
         } 
         else {
-            Err(())
+            println!("Invalid input");
+            None
         }
     }
     ///Only used during selection of cards to keep and discard
@@ -97,16 +99,6 @@ impl UserInput {
             else {
                 println!("Invalid input");
             }
-        }
-    }
-
-    pub fn double_input(&self) -> Option<usize> {
-
-        if let Ok(parsed_input) = self.chk_parsed_double_input(){
-            Some(parsed_input)
-        } else {
-            println!("Invalid input");
-            None
         }
     }
 
