@@ -13,7 +13,7 @@ use hand::*;
 use machine::*;
 
 fn main() {
-    let mut current_funds = Funds::new();
+    let mut current_funds = Wallet::new();
     let mut state = MachineState::InsertCoin;
     print_insert_coin();
 
