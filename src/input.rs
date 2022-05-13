@@ -1,7 +1,6 @@
-use clearscreen::ClearScreen;
+use clearscreen::ClearScreen; //just used to clear terminal, not the prettiest...
 use std::io;
 
-use crate::card::*;
 use crate::hand::*;
 use crate::machine::*;
 use crate::utils::*;
@@ -11,6 +10,7 @@ pub struct UserInput {
     pub input_string: String,
 }
 
+///We need to use input control where invalid input would cause bugs if it was sent forward in a MachineState.
 #[derive(PartialEq)]
 pub enum InputControl {
     Valid,
@@ -18,60 +18,72 @@ pub enum InputControl {
 }
 
 impl UserInput {
+    //Just to simplify read stdin to one fn call
     pub fn get_user_input() -> Self {
         let mut input_string = String::new();
         io::stdin()
             .read_line(&mut input_string)
-            .expect("UserInput::, Failed to read line");
+            .expect("Failed to read line");
 
         UserInput {
             input_string,
         }
     }
 
+    ///Try and parse the input
     pub fn parse_input(&self) -> Result<usize, ()> {
         if let Ok(parsed_input) = self.input_string.trim().parse::<usize>() {
             Ok(parsed_input)
-        } else {
+        } 
+        else {
             Err(())
         }
     }
-
+    ///Check if the parsed input is within the allowed span of 1-5 (Selecting card 1-5)
     pub fn chk_select_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
             if input <= 5 && input >= 1 {
                 Ok(input)
-            } else {
+            } 
+            else {
                 Err(())
             }
-        } else {
+        } 
+        else {
             Err(())
         }
     }
-
+    //Check if the parsed input is the allowed values of funds to be "inserted" into the "machine"
     fn chk_parsed_funds_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
             if input == 1 || input == 2 || input == 5 || input == 10 {
                 Ok(input)
-            } else {
+            } 
+            else {
                 Err(())
             }
-        } else {
-            Err(())
-        }
-    }
-    fn chk_parsed_double_input(&self) -> Result<usize, ()> {
-        if let Ok(input) = self.parse_input() {
-            if input <= 4 && input >= 1 {
-                Ok(input)
-            } else {
-                Err(())
-            }
-        } else {
+        } 
+        else {
             Err(())
         }
     }
 
+    ///Check if the parsed input is within the allowed span of 1-4 (Selecting card 1-4)
+    fn chk_parsed_double_input(&self) -> Result<usize, ()> {
+        if let Ok(input) = self.parse_input() {
+            if input <= 4 && input >= 1 {
+                Ok(input)
+            } 
+            else {
+                Err(())
+            }
+        } 
+        else {
+            Err(())
+        }
+    }
+    ///Only used during selection of cards to keep and discard
+    ///Player inputs to select or de-select a card
     pub fn card_selection(
         &self,
         hand: &mut Hand,
@@ -79,33 +91,33 @@ impl UserInput {
         state: &mut MachineState,
         funds: &Wallet,
         ) {
-        if self.input_string.trim().to_lowercase() == "draw" {
+        if self.input_string.trim().to_lowercase() == "draw" { //Player inputs "draw" to get out of card selection state
             ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::CoinsAvailable;
         } else {
-            if let Ok(parsed_input) = self.chk_select_input() {
+            if let Ok(parsed_input) = self.chk_select_input() { //check for valid input
                 ClearScreen::default().clear().expect("failed to clear terminal");
-                let card: &mut Card = &mut hand.hand_vec[parsed_input - 1];
-                card.alter_selection();
+                hand.hand_vec[parsed_input - 1].alter_selection(); //change if a card is selected or not (player selection)
                 *holder = format_hand(&hand);
                 print_hand_and_credits(&holder, &funds);
-            } else {
+            } 
+            else {
                 println!("Invalid input");
             }
         }
     }
-    pub fn double_input(&self, input_control: &mut InputControl) -> usize{
+
+    pub fn double_input(&self) -> Option<usize> {
 
         if let Ok(parsed_input) = self.chk_parsed_double_input(){
-            *input_control = InputControl::Valid;
-            parsed_input
+            Some(parsed_input)
         } else {
             println!("Invalid input");
-            0
+            None
         }
     }
 
-    pub fn funds_input(&self, funds: &mut Wallet, state: &mut MachineState) {
+    pub fn insert_funds(&self, funds: &mut Wallet, state: &mut MachineState) {
         if self.input_string.trim().to_lowercase() == "draw" {
             if funds.credits > 0 {
                 *state = MachineState::CoinsAvailable;
