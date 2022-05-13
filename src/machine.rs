@@ -3,13 +3,13 @@ use crate::hand::*;
 use crate::input::InputControl;
 use crate::utils::*;
 
-pub struct Funds {
+pub struct Wallet {
     pub credits: usize,
 }
 
-pub struct Evaluation {
+pub struct Evaluation<'a> {
     pub hand_value: usize,
-    hand_type: String,
+    hand_type: &'a str,
 }
 
 #[derive(PartialEq)]
@@ -21,8 +21,8 @@ pub enum MachineState {
     Win,
 }
 
-impl Evaluation {
-    pub fn new(hand_value: usize, hand_type: String) -> Self {
+impl <'a> Evaluation<'a> {
+    pub fn new(hand_value: usize, hand_type: &'a str) -> Self {
         Self {
             hand_value,
             hand_type,
@@ -39,7 +39,7 @@ impl Evaluation {
     }
 }
 
-impl Funds {
+impl Wallet {
     pub fn new() -> Self {
         Self { credits: 0 }
     }
@@ -160,28 +160,30 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         values_filtered[0].1,
         values_filtered[1].1,
     ) {
-        (_, _, 5, _) => Evaluation::new(100, String::from("Five Of A Kind")),
+        (_, _, 5, _) => Evaluation::new(100, "Five Of A Kind"),
         (true, true, _, _) => {
-            if pointer == 8 {
-                Evaluation::new(250, String::from("Royal Flush"))
-            } else {
-                Evaluation::new(50, String::from("Straight Flush")) // if a joker was used then its only a straight flush
-            }
-        }
-        (_, _, 4, _) => Evaluation::new(25, String::from("Four Of A Kind")),
-        (_, _, 3, 2) => Evaluation::new(9, String::from("Full House")),
-        (true, _, _, _) => Evaluation::new(6, String::from("Flush")),
-        (_, true, _, _) => Evaluation::new(4, String::from("Straight")),
-        (_, _, 3, _) => Evaluation::new(3, String::from("Three Of A Kind")),
-        (_, _, 2, 2) => Evaluation::new(2, String::from("Two Pair")),
+                        if pointer == 8 {
+                             Evaluation::new(250, "Royal Flush")
+                            } 
+                        else {
+                            Evaluation::new(50, "Straight Flush") // if a joker was used then its only a straight flush
+                        }
+                    }
+        (_, _, 4, _) => Evaluation::new(25, "Four Of A Kind"),
+        (_, _, 3, 2) => Evaluation::new(9, "Full House"),
+        (true, _, _, _) => Evaluation::new(6, "Flush"),
+        (_, true, _, _) => Evaluation::new(4, "Straight"),
+        (_, _, 3, _) => Evaluation::new(3, "Three Of A Kind"),
+        (_, _, 2, 2) => Evaluation::new(2, "Two Pair"),
         (_, _, 2, _) => {
-            if values_filtered[0].0 >= 10 {
-                Evaluation::new(1, String::from("Jacks Or Better"))
-            } else {
-                Evaluation::new(0, String::from(""))
-            }
-        }
-        _ => Evaluation::new(0, String::from("")),
+                        if values_filtered[0].0 >= 10 {
+                            Evaluation::new(1, "Jacks Or Better")
+                        } 
+                        else {
+                            Evaluation::new(0, "")
+                        }
+                    }
+        _ => Evaluation::new(0, ""),
     };
     new_evaluation
 }

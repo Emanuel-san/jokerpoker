@@ -96,7 +96,7 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
     vec_holder
 }
 
-pub fn print_hand_and_credits(vec_of_charholder: &Vec<CharHolder>, current_funds: &Funds) {
+pub fn print_hand_and_credits(vec_of_charholder: &Vec<CharHolder>, current_funds: &Wallet) {
     println!("CREDITS: {}", current_funds.credits);
     for row in 0..11 {
         for card in vec_of_charholder {

@@ -93,7 +93,7 @@ impl UserInput {
         hand: &mut Hand,
         holder: &mut Vec<CharHolder>,
         state: &mut MachineState,
-        funds: &Funds,
+        funds: &Wallet,
         ) {
         if let Ok(()) = self.chk_draw_input() {
             ClearScreen::default().clear().expect("failed to clear terminal");
@@ -121,7 +121,7 @@ impl UserInput {
         }
     }
 
-    pub fn funds_input(&self, funds: &mut Funds, state: &mut MachineState) {
+    pub fn funds_input(&self, funds: &mut Wallet, state: &mut MachineState) {
         if let Ok(()) = self.chk_draw_input() {
             if funds.credits > 0 {
                 *state = MachineState::CoinsAvailable;
@@ -139,7 +139,7 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Funds, state: &mut MachineState, credits_won: &usize, control: &mut InputControl) {
+    pub fn win_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, control: &mut InputControl) {
         if let Ok(()) = self.chk_draw_input() {
             funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
@@ -158,7 +158,7 @@ impl UserInput {
         }
     }
 
-    pub fn end_input(&self, funds: &mut Funds, control: &mut InputControl, state: &mut MachineState,){
+    pub fn end_input(&self, funds: &mut Wallet, control: &mut InputControl, state: &mut MachineState,){
         if let Ok(()) = self.chk_draw_input(){
             ClearScreen::default().clear().expect("failed to clear terminal");
             *control = InputControl::Valid;
