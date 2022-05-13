@@ -49,22 +49,6 @@ impl UserInput {
         }
     }
 
-    fn chk_draw_input(&self) -> Result<(), ()> {
-        if self.input_string.trim().to_lowercase() == "draw" {
-            Ok(())
-        } else {
-            Err(())
-        }
-    }
-
-    fn chk_withdraw_input(&self) -> Result<(), ()> {
-        if self.input_string.trim().to_lowercase() == "withdraw" {
-            Ok(())
-        } else {
-            Err(())
-        }
-    }
-
     fn chk_parsed_funds_input(&self) -> Result<usize, ()> {
         if let Ok(input) = self.parse_input() {
             if input == 1 || input == 2 || input == 5 || input == 10 {
@@ -95,7 +79,7 @@ impl UserInput {
         state: &mut MachineState,
         funds: &Wallet,
         ) {
-        if let Ok(()) = self.chk_draw_input() {
+        if self.input_string.trim().to_lowercase() == "draw" {
             ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::CoinsAvailable;
         } else {
@@ -122,7 +106,7 @@ impl UserInput {
     }
 
     pub fn funds_input(&self, funds: &mut Wallet, state: &mut MachineState) {
-        if let Ok(()) = self.chk_draw_input() {
+        if self.input_string.trim().to_lowercase() == "draw" {
             if funds.credits > 0 {
                 *state = MachineState::CoinsAvailable;
             } else {
@@ -140,12 +124,12 @@ impl UserInput {
     }
 
     pub fn win_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, control: &mut InputControl) {
-        if let Ok(()) = self.chk_draw_input() {
+        if self.input_string.trim().to_lowercase() == "draw" {
             funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
             *control = InputControl::Valid;
         } 
-        else if let Ok(()) = self.chk_withdraw_input() {
+        else if self.input_string.trim().to_lowercase() == "withdraw" {
             funds.credits = 0;
             *state = MachineState::InsertCoin;
         } 
@@ -159,11 +143,11 @@ impl UserInput {
     }
 
     pub fn end_input(&self, funds: &mut Wallet, control: &mut InputControl, state: &mut MachineState,){
-        if let Ok(()) = self.chk_draw_input(){
+        if self.input_string.trim().to_lowercase() == "draw"{
             ClearScreen::default().clear().expect("failed to clear terminal");
             *control = InputControl::Valid;
         }
-        else if let Ok(()) = self.chk_withdraw_input(){
+        else if self.input_string.trim().to_lowercase() == "withdraw"{
             funds.credits = 0;
             *control = InputControl::Valid;
             *state = MachineState::InsertCoin;
