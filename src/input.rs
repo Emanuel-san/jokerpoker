@@ -120,7 +120,7 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, input_control: &mut bool) {
+    pub fn player_won_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, input_control: &mut bool) {
         if self.input_string.trim().to_lowercase() == "draw" {
             funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
@@ -138,7 +138,7 @@ impl UserInput {
         }
     }
 
-    pub fn end_input(&self, funds: &mut Wallet, state: &mut MachineState) -> bool{
+    pub fn player_lost_input(&self, funds: &mut Wallet, state: &mut MachineState) -> bool{
         if self.input_string.trim().to_lowercase() == "draw"{
             ClearScreen::default().clear().expect("failed to clear terminal");
             true

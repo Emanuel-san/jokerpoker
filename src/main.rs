@@ -56,7 +56,7 @@ fn main() {
             while state == MachineState::Win {
                 print_tips(&state);
                 player_input = UserInput::get_user_input();
-                player_input.win_input(&mut current_funds, &mut state, &credits_won, &mut input_control);
+                player_input.player_won_input(&mut current_funds, &mut state, &credits_won, &mut input_control);
 
                 while state == MachineState::Double {
                     let mut doubling_deck = Deck::get_deck();
@@ -83,7 +83,7 @@ fn main() {
             while input_control == false && state != MachineState::InsertCoin{
                 print_tips(&state);
                 player_input = UserInput::get_user_input();
-                input_control = player_input.end_input(&mut current_funds, &mut state);
+                input_control = player_input.player_lost_input(&mut current_funds, &mut state);
             }
         }
     }
