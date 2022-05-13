@@ -10,13 +10,6 @@ pub struct UserInput {
     pub input_string: String,
 }
 
-///We need to use input control where invalid input would cause bugs if it was sent forward in a MachineState.
-#[derive(PartialEq)]
-pub enum InputControl {
-    Valid,
-    Invalid
-}
-
 impl UserInput {
     //Just to simplify read stdin to one fn call
     pub fn get_user_input() -> Self {
@@ -135,11 +128,11 @@ impl UserInput {
         }
     }
 
-    pub fn win_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, control: &mut InputControl) {
+    pub fn win_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, input_control: &mut bool) {
         if self.input_string.trim().to_lowercase() == "draw" {
             funds.add_funds(credits_won);
             *state = MachineState::CoinsAvailable;
-            *control = InputControl::Valid;
+            *input_control = true;
         } 
         else if self.input_string.trim().to_lowercase() == "withdraw" {
             funds.credits = 0;
@@ -147,26 +140,26 @@ impl UserInput {
         } 
         else if self.input_string.trim().to_lowercase() == "double"{
             *state = MachineState::Double;
-            *control = InputControl::Invalid;
         } 
         else {
             println!("Invalid input");
         }
     }
 
-    pub fn end_input(&self, funds: &mut Wallet, control: &mut InputControl, state: &mut MachineState,){
+    pub fn end_input(&self, funds: &mut Wallet, state: &mut MachineState) -> bool{
         if self.input_string.trim().to_lowercase() == "draw"{
             ClearScreen::default().clear().expect("failed to clear terminal");
-            *control = InputControl::Valid;
+            true
         }
         else if self.input_string.trim().to_lowercase() == "withdraw"{
             funds.credits = 0;
-            *control = InputControl::Valid;
             *state = MachineState::InsertCoin;
             print_insert_coin();
+            true
         }
         else{
             println!("Invalid input");
+            false
         }
     }
 }

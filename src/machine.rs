@@ -1,6 +1,5 @@
 use crate::card::*;
 use crate::hand::*;
-use crate::input::InputControl;
 use crate::utils::*;
 ///Holds current credits left in play
 pub struct Wallet {
@@ -65,8 +64,7 @@ pub fn evaluate_doubling(
     hand: &Hand, 
     credits_won: &mut usize, 
     selected_index: &usize, 
-    state: &mut MachineState,
-    input_control: &mut InputControl,)
+    state: &mut MachineState,)
     {
     if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{ //If the Card value selected by the player is higher then the machine, then player wins
         *credits_won *= 2; //Double the current credits won by 2
@@ -76,7 +74,6 @@ pub fn evaluate_doubling(
     else {
         println!("BUST!");
         *state = MachineState::CoinsAvailable;
-        *input_control = InputControl::Invalid; //Set input control to Invalid again since we want to give the option of either withdrawing the credits or draw another hand
     }
 }
 

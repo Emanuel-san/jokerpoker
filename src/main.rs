@@ -20,7 +20,7 @@ fn main() {
     while state == MachineState::InsertCoin {
         println!("CREDITS: {}", current_funds.credits);
         let mut player_input = UserInput::get_user_input();
-        player_input.funds_input(&mut current_funds, &mut state);
+        player_input.insert_funds(&mut current_funds, &mut state);
 
         while state == MachineState::CoinsAvailable {
             ClearScreen::default().clear().expect("failed to clear terminal");
@@ -51,7 +51,7 @@ fn main() {
             let evaluation = evaluate_hand(&five_card_hand);
             evaluation.chk_evaluation_for_win(&mut state);
             let mut credits_won = evaluation.hand_value;
-            let mut input_control = InputControl::Invalid;
+            let mut input_control = false;
 
             while state == MachineState::Win {
                 print_tips(&state);
@@ -60,30 +60,30 @@ fn main() {
 
                 while state == MachineState::Double {
                     let mut doubling_deck = Deck::get_deck();
-                    let mut selected_index: usize = 0;
+                    let mut selected_index = None;
                     five_card_hand = Hand::new();
                     five_card_hand.draw_card(&mut doubling_deck);
                     holder = format_hand(&five_card_hand);
                     print_hand_and_credits(&holder, &current_funds);
                     println!("  DEALERS CARD\n");
-                    while input_control == InputControl::Invalid{
+                    while selected_index == None{
                         print_tips(&state);
                         player_input = UserInput::get_user_input();
-                        selected_index = player_input.double_input(&mut input_control);
+                        selected_index = player_input.double_input();
                     }
                     five_card_hand.draw_until_five_cards(&mut doubling_deck);
-                    five_card_hand.hand_vec[selected_index].alter_selection();
+                    five_card_hand.hand_vec[selected_index.unwrap()].alter_selection();
                     holder = format_hand(&five_card_hand);
                     print_hand_and_credits(&holder, &current_funds);
                     println!("  DEALERS CARD\n");
-                    evaluate_doubling(&five_card_hand, &mut credits_won, &selected_index, &mut state, &mut input_control);
+                    evaluate_doubling(&five_card_hand, &mut credits_won, &selected_index.unwrap(), &mut state);
                 }
             }
             current_funds.chk_funds(&mut state);
-            while input_control == InputControl::Invalid && state != MachineState::InsertCoin{
+            while input_control == false && state != MachineState::InsertCoin{
                 print_tips(&state);
                 player_input = UserInput::get_user_input();
-                player_input.end_input(&mut current_funds, &mut input_control, &mut state);
+                input_control = player_input.end_input(&mut current_funds, &mut state);
             }
         }
     }
