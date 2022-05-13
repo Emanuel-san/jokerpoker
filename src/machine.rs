@@ -2,14 +2,14 @@ use crate::card::*;
 use crate::hand::*;
 use crate::input::InputControl;
 use crate::utils::*;
-
+///Holds current credits left in play
 pub struct Wallet {
     pub credits: usize,
 }
-
+///Holds the evaluated values of a Hand
 pub struct Evaluation<'a> {
     pub hand_value: usize,
-    hand_type: &'a str,
+    hand_type: &'a str, //string slice will live as long as lifetime 'a (Evaluation)
 }
 
 #[derive(PartialEq)]
@@ -28,7 +28,7 @@ impl <'a> Evaluation<'a> {
             hand_type,
         }
     }
-
+    ///Check if the evaluation was a winning hand
     pub fn chk_evaluation_for_win(&self, state: &mut MachineState) {
         if self.hand_value > 0 {
             println!("YOU WON!\n{} pays {}", self.hand_type, self.hand_value);
@@ -43,22 +43,24 @@ impl Wallet {
     pub fn new() -> Self {
         Self { credits: 0 }
     }
+    ///Check if there are credits left
     pub fn chk_funds(&mut self, state: &mut MachineState) {
         if self.credits == 0 {
-            //ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::InsertCoin;
             print_insert_coin();
         }
     }
+    ///Reduce credits by 1
     pub fn reduce_funds(&mut self) {
         self.credits -= 1;
     }
-
+    ///Add to playable credits
     pub fn add_funds(&mut self, funds_to_add: &usize) {
         self.credits += funds_to_add;
     }
 }
 
+//Evaluate if the machine or the player won the doubling Hand.
 pub fn evaluate_doubling(
     hand: &Hand, 
     credits_won: &mut usize, 
@@ -66,23 +68,25 @@ pub fn evaluate_doubling(
     state: &mut MachineState,
     input_control: &mut InputControl,)
     {
-    if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{
-        *credits_won *= 2;
+    if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{ //If the Card value selected by the player is higher then the machine, then player wins
+        *credits_won *= 2; //Double the current credits won by 2
         println!("You beat the dealer! Credits won are now {}", credits_won);
-        *state = MachineState::Win;
-    } else {
+        *state = MachineState::Win; //Set the state back to Win in case the player want's to double again.
+    } 
+    else {
         println!("BUST!");
         *state = MachineState::CoinsAvailable;
-        *input_control = InputControl::Invalid;
+        *input_control = InputControl::Invalid; //Set input control to Invalid again since we want to give the option of either withdrawing the credits or draw another hand
     }
 }
 
+///Evaluate a Hand and check if it's a winning hand
 pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
     let mut suit_tracker = [0u8; 4];
     let mut value_tracker = [0u8; 15];
     let mut jokers: u8 = 0;
 
-    for card in &poker_hand.hand_vec {
+    for card in &poker_hand.hand_vec { //Check each card and hand value and suit to corresponding array and element
         value_tracker[card.value as usize] += 1;
         match card.suit {
             CardSuit::Diamond => suit_tracker[0] += 1,
@@ -101,7 +105,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         .filter(|&x| x > 0)
         .collect::<Vec<_>>();
     counted_suits.sort_unstable(); //... and sort it.
-    counted_suits[0] += jokers; // add jokers to the index 0 incase they create a flush. (i.e index == 3 and we have 2 jokers, then we have a flush.)
+    counted_suits[0] += jokers; // add joker(s) to the index 0 incase it creates a flush. (i.e counted_suits[0] == 3 and we have 2 jokers, then we have a flush.)
     let is_flush = counted_suits[0] == 5; // If index 0 contains element 5 then we have a flush.
     let mut is_straight = false;
 
@@ -122,7 +126,7 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
             }
             straight_cards += 1;             //if we found a index with a none zero value or we used a joker, add 1 straight card.
         }
-        pointer -= 1;                        //always reduce by atleast one since even tho we used jokers we can guarantee the first index we check will not form a straight.
+        pointer -= 1;                        //always reduce by atleast one since even tho we used jokers we can guarantee the first index in the sequence we check will not form a straight.
         if straight_cards == 5 {
             is_straight = true;              // We have a straight!
             break;
@@ -138,23 +142,24 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
         .take(14)
         .filter(|&x| x.1 > 0)
         .collect::<Vec<_>>();
-        //println!("Debug filtered values: {:?}", values_filtered);
     //sort by quantity first, then by value
     values_filtered.sort_unstable_by(|a, b| {
-        if b.1 == a.1 {
-            //if same quantity
+        if b.1 == a.1 { //if same quantity
             (b.0).cmp(&a.0) //Sort by value
-        } else {
+        } 
+        else {//else sort by quantity
             (b.1).cmp(&a.1)
         }
-    }); //else sort by quantity
+    });
 
-    values_filtered[0].1 += jokers; //
-    if values_filtered.len() == 1 {
+    values_filtered[0].1 += jokers; //add jokers to the highest sorted quantity
+
+    //push a tuple to the vector if lenth is 1 to satisfy the match expression below, i.e five a kind leave us with [(5, x)] and would panic since we are then
+    //looking outside the vector when matching value at values_filtered[1].1
+    if values_filtered.len() == 1 { 
         values_filtered.push((0, 0));
     }
-    //println!("Debug filtered values: {:?}", values_filtered);
-    let new_evaluation = match (
+    match (
         is_flush,
         is_straight,
         values_filtered[0].1,
@@ -184,6 +189,5 @@ pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
                         }
                     }
         _ => Evaluation::new(0, ""),
-    };
-    new_evaluation
+    }
 }
