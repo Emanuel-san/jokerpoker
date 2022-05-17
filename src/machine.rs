@@ -1,11 +1,11 @@
 use crate::card::*;
 use crate::hand::*;
 use crate::utils::*;
-///Holds current credits left in play
+///Holds credits
 pub struct Wallet {
     pub credits: usize,
 }
-///Holds the evaluated values of a Hand
+///Evaluation data type
 pub struct Evaluation<'a> {
     pub hand_value: usize,
     hand_type: &'a str, //string slice will live as long as lifetime 'a (Evaluation)

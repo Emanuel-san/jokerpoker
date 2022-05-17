@@ -1,9 +1,12 @@
+///Card data type
 #[derive(Debug)]
 pub struct Card {
     pub value: u8,
     pub suit: CardSuit,
     pub selected: bool,
 }
+
+///enum for named card suits
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum CardSuit {
     Diamond = 1,

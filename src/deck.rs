@@ -1,6 +1,7 @@
 use crate::card::*;
 use rand::prelude::*;
 
+///Deck data type
 #[derive(Debug)]
 pub struct Deck {
     pub deck_vec: Vec<Card>,

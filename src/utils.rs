@@ -2,6 +2,7 @@ use crate::hand::*;
 use crate::machine::*;
 use std::*;
 
+///Character holder data type
 #[derive(Debug)]
 pub struct CharHolder {
     holder: Vec<char>,

@@ -1,6 +1,7 @@
 use crate::card::*;
 use crate::deck::*;
 
+///Hand data type
 #[derive(Debug)]
 pub struct Hand {
     pub hand_vec: Vec<Card>,
