@@ -7,7 +7,7 @@ pub struct CharHolder {
     holder: Vec<char>,
 }
 
-///"Insert coin" ASCII-art
+///prints "Insert coin" ASCII-art in terminal
 pub fn print_insert_coin() {
     println!("
 ██ ███    ██ ███████ ███████ ██████  ████████      ██████  ██████  ██ ███    ██ 
@@ -100,7 +100,7 @@ pub fn format_hand(hand: &Hand) -> Vec<CharHolder> {
     vec_holder
 }
 
-///Prints a 5 card hand in a row
+///Prints a 5 card hand in a row in the terminal
 pub fn print_hand_and_credits(vec_of_charholder: &Vec<CharHolder>, current_funds: &Wallet) {
     println!("CREDITS: {}", current_funds.credits);
     for row in 0..11 { // a card contains 11 rows of lines
