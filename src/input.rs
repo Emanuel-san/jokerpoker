@@ -33,17 +33,17 @@ impl UserInput {
         }
     }
     ///Check if the parsed input is within the allowed span of 1-5 (Selecting card 1-5)
-    pub fn chk_select_input(&self) -> Result<usize, ()> {
+    pub fn chk_select_input(&self) -> Option<usize> {
         if let Ok(input) = self.parse_input() {
             if input <= 5 && input >= 1 {
-                Ok(input)
+                Some(input)
             } 
             else {
-                Err(())
+                None
             }
         } 
         else {
-            Err(())
+            None
         }
     }
     //Check if the parsed input is the allowed values of funds to be "inserted" into the "machine"
@@ -89,7 +89,7 @@ impl UserInput {
             ClearScreen::default().clear().expect("failed to clear terminal");
             *state = MachineState::CreditsAvailable;
         } else {
-            if let Ok(parsed_input) = self.chk_select_input() { //check for valid input
+            if let Some(parsed_input) = self.chk_select_input() { //check for valid input
                 ClearScreen::default().clear().expect("failed to clear terminal");
                 hand.hand_vec[parsed_input - 1].alter_selection(); //change if a card is selected or not (player selection)
                 *holder = format_hand(&hand);
