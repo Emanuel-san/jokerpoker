@@ -47,17 +47,17 @@ impl UserInput {
         }
     }
     //Check if the parsed input is the allowed values of funds to be "inserted" into the "machine"
-    fn chk_parsed_funds_input(&self) -> Result<usize, ()> {
+    fn chk_parsed_funds_input(&self) -> Option<usize> {
         if let Ok(input) = self.parse_input() {
             if input == 1 || input == 2 || input == 5 || input == 10 {
-                Ok(input)
+                Some(input)
             } 
             else {
-                Err(())
+                None
             }
         } 
         else {
-            Err(())
+            None
         }
     }
 
@@ -77,7 +77,6 @@ impl UserInput {
             None
         }
     }
-    ///Only used during selection of cards to keep and discard
     ///Player inputs to select or de-select a card
     pub fn card_selection(
         &self,
@@ -88,7 +87,7 @@ impl UserInput {
         ) {
         if self.input_string.trim().to_lowercase() == "draw" { //Player inputs "draw" to get out of card selection state
             ClearScreen::default().clear().expect("failed to clear terminal");
-            *state = MachineState::CoinsAvailable;
+            *state = MachineState::CreditsAvailable;
         } else {
             if let Ok(parsed_input) = self.chk_select_input() { //check for valid input
                 ClearScreen::default().clear().expect("failed to clear terminal");
@@ -101,16 +100,16 @@ impl UserInput {
             }
         }
     }
-
+    ///Either adds funds or changes machine state depending on player input (Only used when state is InsertCoin)
     pub fn insert_funds(&self, funds: &mut Wallet, state: &mut MachineState) {
         if self.input_string.trim().to_lowercase() == "draw" {
             if funds.credits > 0 {
-                *state = MachineState::CoinsAvailable;
+                *state = MachineState::CreditsAvailable;
             } else {
                 println!("No available funds");
             }
         } else {
-            if let Ok(input) = self.chk_parsed_funds_input() {
+            if let Some(input) = self.chk_parsed_funds_input() { //check for valid input
                 ClearScreen::default().clear().expect("failed to clear terminal");
                 funds.add_funds(&input);
                 print_insert_coin();
@@ -120,13 +119,15 @@ impl UserInput {
         }
     }
 
+    ///Available options after a win scenario and changes states accordingly to player input
     pub fn player_won_input(&self, funds: &mut Wallet, state: &mut MachineState, credits_won: &usize, input_control: &mut bool) {
         if self.input_string.trim().to_lowercase() == "draw" {
-            funds.add_funds(credits_won);
-            *state = MachineState::CoinsAvailable;
-            *input_control = true;
+            funds.add_funds(credits_won); //add winnings to total available credits
+            *state = MachineState::CreditsAvailable;
+            *input_control = true; //this is to satisfy the while expression in main.rs line 83, else we prompt the player with choice a twice
         } 
         else if self.input_string.trim().to_lowercase() == "withdraw" {
+            println!("Withdrawing {} credits", funds.credits);
             funds.credits = 0;
             *state = MachineState::InsertCoin;
         } 
@@ -137,13 +138,14 @@ impl UserInput {
             println!("Invalid input");
         }
     }
-
+    //Available options after a loose scenario, boolean is returned depending on input validation
     pub fn player_lost_input(&self, funds: &mut Wallet, state: &mut MachineState) -> bool{
         if self.input_string.trim().to_lowercase() == "draw"{
             ClearScreen::default().clear().expect("failed to clear terminal");
             true
         }
         else if self.input_string.trim().to_lowercase() == "withdraw"{
+            println!("Withdrawing {} credits", funds.credits);
             funds.credits = 0;
             *state = MachineState::InsertCoin;
             print_insert_coin();

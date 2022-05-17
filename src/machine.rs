@@ -13,7 +13,7 @@ pub struct Evaluation<'a> {
 
 #[derive(PartialEq)]
 pub enum MachineState {
-    CoinsAvailable,
+    CreditsAvailable,
     CardSelection,
     InsertCoin,
     Double,
@@ -73,17 +73,17 @@ pub fn evaluate_doubling(
     } 
     else {
         println!("BUST!");
-        *state = MachineState::CoinsAvailable;
+        *state = MachineState::CreditsAvailable;
     }
 }
 
-///Evaluate a Hand and check if it's a winning hand
+///Evaluate a Hand if it contains a winning poker hand
 pub fn evaluate_hand(poker_hand: &Hand) -> Evaluation {
     let mut suit_tracker = [0u8; 4];
     let mut value_tracker = [0u8; 15];
     let mut jokers: u8 = 0;
 
-    for card in &poker_hand.hand_vec { //Check each card and hand value and suit to corresponding array and element
+    for card in &poker_hand.hand_vec { //Check each face and suit value and increment that element value in the correct coresponding array
         value_tracker[card.value as usize] += 1;
         match card.suit {
             CardSuit::Diamond => suit_tracker[0] += 1,

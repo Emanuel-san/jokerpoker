@@ -7,7 +7,7 @@ pub struct Deck {
 }
 
 impl Deck {
-    ///Deck constructor
+    ///constructor
     fn new() -> Self {
         Self {
             deck_vec: Vec::new(),

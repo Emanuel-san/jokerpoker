@@ -19,6 +19,7 @@ fn convert_bytes_to_integer(bytes: &[u8]) -> u8 {
 }
 
 impl Card {
+    ///constructor
     fn new() -> Self {
         Self {
             value: 0,
@@ -26,7 +27,7 @@ impl Card {
             selected: false,
         }
     }
-
+    ///create a card from given face and suit values
     pub fn get_card(card_value: u8, suit_value: u8) -> Card {
         let mut new_card = Card::new();
         new_card.value = card_value;
@@ -36,11 +37,12 @@ impl Card {
             2 => CardSuit::Clove,
             3 => CardSuit::Spade,
             4 => CardSuit::Heart,
-            _ => panic!("Card::generate_card: Failed choosing random suit"),
+            _ => panic!("Card::generate_card: Failed matching suit"),
         };
         new_card
     }
 
+    //returns each face in bytes
     pub fn get_face_bytes(&self) -> Vec<u8> {
         let face: Vec<u8>;
         match self.value {
@@ -52,12 +54,13 @@ impl Card {
             13 => face = vec![65, 32],
             number => {
                 face = vec![
-                    convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,]
+                    convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,] // face values between 2-10
             }
         }
         face
     }
 
+    // returns each suit in bytes
     pub fn get_suit_bytes(&self) -> Vec<u8> {
         let suit: Vec<u8>;
         match self.suit {
@@ -70,6 +73,7 @@ impl Card {
         suit
     }
 
+    //changes if a card is selected or not
     pub fn alter_selection(&mut self) {
         if self.selected == false {
             self.selected = true;
