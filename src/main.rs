@@ -2,7 +2,7 @@ mod card;
 mod deck;
 mod hand;
 mod input;
-mod machine;
+mod logic;
 mod utils;
 
 use crate::input::*;
@@ -10,7 +10,7 @@ use crate::utils::*;
 use clearscreen::ClearScreen;
 use deck::*;
 use hand::*;
-use machine::*;
+use logic::*;
 
 fn main() {
     let mut current_funds = Wallet::new();

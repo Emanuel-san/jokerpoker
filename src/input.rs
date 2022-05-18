@@ -2,7 +2,7 @@ use clearscreen::ClearScreen; //just used to clear terminal, not the prettiest..
 use std::io;
 
 use crate::hand::*;
-use crate::machine::*;
+use crate::logic::*;
 use crate::utils::*;
 
 #[derive(PartialEq)]
