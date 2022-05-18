@@ -72,7 +72,7 @@ fn main() {
                         selected_index = player_input.chk_parsed_double_input();
                     }
                     five_card_hand.draw_until_five_cards(&mut doubling_deck); // draw the rest of the cards
-                    five_card_hand.hand_vec[selected_index.unwrap()].alter_selection(); // set the card the player chose to selected 
+                    five_card_hand.alter_selected_card(selected_index.unwrap()); // set the card the player chose to selected 
                     holder = format_hand(&five_card_hand);
                     print_hand_and_credits(&holder, &current_funds);
                     println!("  DEALERS CARD\n");

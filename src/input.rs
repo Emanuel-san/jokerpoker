@@ -91,7 +91,7 @@ impl UserInput {
         } else {
             if let Some(parsed_input) = self.chk_select_input() { //check for valid input
                 ClearScreen::default().clear().expect("failed to clear terminal");
-                hand.hand_vec[parsed_input - 1].alter_selection(); //change if a card is selected or not (player selection)
+                hand.alter_selected_card(parsed_input - 1); //change if a card in hand is selected or not (player selection)
                 *holder = format_hand(&hand);
                 print_hand_and_credits(&holder, &funds);
             } 
