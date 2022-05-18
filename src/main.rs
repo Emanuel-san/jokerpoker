@@ -25,7 +25,7 @@ fn main() {
         while state == MachineState::CreditsAvailable { // player input "draw"
             ClearScreen::default().clear().expect("failed to clear terminal");
             current_funds.reduce_funds(); //reduce credits by 1
-            let mut deck_of_cards = Deck::get_deck(); //make a new deck for each hand
+            let mut deck_of_cards = Deck::new_deck(); //make a new deck for each hand
             let mut five_card_hand = Hand::new();
             //let mut debug_hand = Hand::new();
             //debug_hand._test_hand();
@@ -59,7 +59,7 @@ fn main() {
                 player_input.player_won_input(&mut current_funds, &mut state, &credits_won, &mut input_control); //player can either "draw", "withdraw" or "double"
 
                 if state == MachineState::Double { // player chose to double the winnings
-                    let mut doubling_deck = Deck::get_deck();// creates a new deck for doubling
+                    let mut doubling_deck = Deck::new_deck();// creates a new deck for doubling
                     let mut selected_index = None;
                     five_card_hand = Hand::new();
                     five_card_hand.draw_card(&mut doubling_deck); //add one face up card to the hand...
