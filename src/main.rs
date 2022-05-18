@@ -48,7 +48,7 @@ fn main() {
             five_card_hand.draw_until_five_cards(&mut deck_of_cards); //... and fill up the hand with new cards
             holder = format_hand(&five_card_hand);
             print_hand_and_credits(&holder, &current_funds);
-            let evaluation = evaluate_hand(&five_card_hand);
+            let evaluation = Evaluation::evaluate_hand(&five_card_hand);
             evaluation.chk_evaluation_for_win(&mut state);
             let mut credits_won = evaluation.hand_value;
             let mut input_control = false;
