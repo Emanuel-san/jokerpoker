@@ -23,7 +23,7 @@ pub enum MachineState {
 impl <'a> Evaluation<'a> {
 
     ///Evaluate a Hand if it contains a winning poker hand
-    pub fn evaluate_hand(five_card_hand: &Hand) -> Evaluation {
+    pub fn evaluate_hand(five_card_hand: &Hand) -> Self {
         let mut suit_tracker = [0u8; 4];
         let mut value_tracker = [0u8; 15];
         let mut jokers: u8 = 0;
