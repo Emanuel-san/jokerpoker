@@ -1,5 +1,5 @@
 use crate::hand::*;
-use crate::machine::*;
+use crate::logic::*;
 use std::*;
 
 ///Character holder data type

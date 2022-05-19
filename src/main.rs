@@ -2,7 +2,7 @@ mod card;
 mod deck;
 mod hand;
 mod input;
-mod machine;
+mod logic;
 mod utils;
 
 use crate::input::*;
@@ -10,7 +10,7 @@ use crate::utils::*;
 use clearscreen::ClearScreen;
 use deck::*;
 use hand::*;
-use machine::*;
+use logic::*;
 
 fn main() {
     let mut current_funds = Wallet::new();
@@ -25,7 +25,7 @@ fn main() {
         while state == MachineState::CreditsAvailable { // player input "draw"
             ClearScreen::default().clear().expect("failed to clear terminal");
             current_funds.reduce_funds(); //reduce credits by 1
-            let mut deck_of_cards = Deck::get_deck(); //make a new deck for each hand
+            let mut deck_of_cards = Deck::new_deck(); //make a new deck for each hand
             let mut five_card_hand = Hand::new();
             //let mut debug_hand = Hand::new();
             //debug_hand._test_hand();
@@ -48,7 +48,7 @@ fn main() {
             five_card_hand.draw_until_five_cards(&mut deck_of_cards); //... and fill up the hand with new cards
             holder = format_hand(&five_card_hand);
             print_hand_and_credits(&holder, &current_funds);
-            let evaluation = evaluate_hand(&five_card_hand);
+            let evaluation = Evaluation::evaluate_hand(&five_card_hand);
             evaluation.chk_evaluation_for_win(&mut state);
             let mut credits_won = evaluation.hand_value;
             let mut input_control = false;
@@ -59,7 +59,7 @@ fn main() {
                 player_input.player_won_input(&mut current_funds, &mut state, &credits_won, &mut input_control); //player can either "draw", "withdraw" or "double"
 
                 if state == MachineState::Double { // player chose to double the winnings
-                    let mut doubling_deck = Deck::get_deck();// creates a new deck for doubling
+                    let mut doubling_deck = Deck::new_deck();// creates a new deck for doubling
                     let mut selected_index = None;
                     five_card_hand = Hand::new();
                     five_card_hand.draw_card(&mut doubling_deck); //add one face up card to the hand...
@@ -72,7 +72,7 @@ fn main() {
                         selected_index = player_input.chk_parsed_double_input();
                     }
                     five_card_hand.draw_until_five_cards(&mut doubling_deck); // draw the rest of the cards
-                    five_card_hand.hand_vec[selected_index.unwrap()].alter_selection(); // set the card the player chose to selected 
+                    five_card_hand.alter_selected_card(selected_index.unwrap()); // set the card the player chose to selected 
                     holder = format_hand(&five_card_hand);
                     print_hand_and_credits(&holder, &current_funds);
                     println!("  DEALERS CARD\n");

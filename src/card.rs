@@ -77,13 +77,4 @@ impl Card {
         }
         suit
     }
-
-    //changes if a card is selected or not
-    pub fn alter_selection(&mut self) {
-        if self.selected == false {
-            self.selected = true;
-        } else {
-            self.selected = false;
-        }
-    }
 }

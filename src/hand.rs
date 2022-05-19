@@ -46,6 +46,14 @@ impl Hand {
         }
     }
 
+    pub fn alter_selected_card(&mut self, input: usize){
+        if self.hand_vec[input].selected == false {
+            self.hand_vec[input].selected = true;
+        } else {
+            self.hand_vec[input].selected = false;
+        }
+    }
+
     //hard coded test hand
     pub fn _test_hand(&mut self){
         self.hand_vec.push(Card::get_card(13, 1));
