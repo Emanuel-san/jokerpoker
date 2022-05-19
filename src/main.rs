@@ -76,7 +76,7 @@ fn main() {
                     holder = format_hand(&five_card_hand);
                     print_hand_and_credits(&holder, &current_funds);
                     println!("  DEALERS CARD\n");
-                    evaluate_doubling(&five_card_hand, &mut credits_won, &selected_index.unwrap(), &mut state);
+                    state = evaluate_doubling(&five_card_hand, &mut credits_won, &selected_index.unwrap());
                 }
             }
             

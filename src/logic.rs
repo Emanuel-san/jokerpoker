@@ -166,21 +166,20 @@ impl Wallet {
     }
 }
 
-//Evaluate if the machine or the player won the doubling Hand.
+///Evaluate if the machine or the player won the doubling Hand.
 pub fn evaluate_doubling(
     hand: &Hand, 
     credits_won: &mut usize, 
-    selected_index: &usize, 
-    state: &mut MachineState,)
+    selected_index: &usize,) -> MachineState
     {
     if hand.hand_vec[0].value < hand.hand_vec[*selected_index].value{ //If the Card value selected by the player is higher then the machine, then player wins
         *credits_won *= 2; //Double the current credits won by 2
         println!("You beat the dealer! Credits won are now {}", credits_won);
-        *state = MachineState::Win; //Set the state back to Win in case the player want's to double again.
+        MachineState::Win //Set the machine state back to Win in case the player want's to double again.
     } 
     else {
         println!("BUST!");
-        *state = MachineState::CreditsAvailable;
+        MachineState::CreditsAvailable
     }
 }
 
