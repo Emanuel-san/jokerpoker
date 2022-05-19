@@ -68,10 +68,10 @@ impl Card {
         let suit: Vec<u8>;
         match self.suit {
             CardSuit::Joker => suit = vec![74],
-            CardSuit::Diamond => suit = vec![226, 153, 166],
+            CardSuit::Diamond => suit = vec![226, 153, 162],
             CardSuit::Spade => suit = vec![226, 153, 160],
             CardSuit::Clove => suit = vec![226, 153, 163],
-            CardSuit::Heart => suit = vec![226, 153, 165],
+            CardSuit::Heart => suit = vec![226, 153, 161],
         }
         suit
     }
