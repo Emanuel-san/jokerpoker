@@ -57,7 +57,9 @@ impl Card {
             13 => face = vec![65, 32],
             number => {
                 face = vec![
-                    convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,] // face values between 2-10
+                    convert_bytes_to_integer((number + 1).to_string().as_bytes()),
+                    32,
+                ] // face values between 2-10
             }
         }
         face
@@ -68,10 +70,10 @@ impl Card {
         let suit: Vec<u8>;
         match self.suit {
             CardSuit::Joker => suit = vec![74],
-            CardSuit::Diamond => suit = vec![226, 153, 166],
+            CardSuit::Diamond => suit = vec![226, 153, 162],
             CardSuit::Spade => suit = vec![226, 153, 160],
             CardSuit::Clove => suit = vec![226, 153, 163],
-            CardSuit::Heart => suit = vec![226, 153, 165],
+            CardSuit::Heart => suit = vec![226, 153, 161],
         }
         suit
     }
