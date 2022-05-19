@@ -57,7 +57,9 @@ impl Card {
             13 => face = vec![65, 32],
             number => {
                 face = vec![
-                    convert_bytes_to_integer((number + 1).to_string().as_bytes()), 32,] // face values between 2-10
+                    convert_bytes_to_integer((number + 1).to_string().as_bytes()),
+                    32,
+                ] // face values between 2-10
             }
         }
         face
