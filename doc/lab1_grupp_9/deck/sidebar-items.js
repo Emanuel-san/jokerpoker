@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Deck","Deck data type"]]});

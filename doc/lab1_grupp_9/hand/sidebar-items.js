@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Hand","Hand data type"]]});

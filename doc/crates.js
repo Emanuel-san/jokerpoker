@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["lab1_grupp_9"];

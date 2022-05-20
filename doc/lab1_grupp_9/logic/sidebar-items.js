@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["MachineState",""]],"fn":[["evaluate_doubling","Evaluate if the machine or the player won the doubling Hand."]],"struct":[["Evaluation","Evaluation data type"],["Wallet","Holds credits"]]});
